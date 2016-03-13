@@ -20,4 +20,4 @@ public class MainClass {
 		menu = new Menu(main_window, menu_status);
 	}
 }
-//Hallo Philipp
+//Hallo Philipp lalala
