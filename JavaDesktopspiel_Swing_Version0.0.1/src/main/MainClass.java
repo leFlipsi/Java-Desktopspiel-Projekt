@@ -6,12 +6,14 @@ public class MainClass {
 	private Window main_window;
 	private Menu menu;
 	
+	//hallo tim
+	
 	public static void main(String[] args) {
 		MainClass start = new MainClass();
 	}
 	public MainClass(){
 		main_window = new Window(TextVars.window_title);
-		loadMenu("options");
+		loadMenu("start");
 	}
 	
 	public void loadMenu(String menu_status){
