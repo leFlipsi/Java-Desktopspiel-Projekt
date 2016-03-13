@@ -11,7 +11,7 @@ public class MainClass {
 	}
 	public MainClass(){
 		main_window = new Window(TextVars.window_title);
-		loadMenu("start");
+		loadMenu("options");
 	}
 	
 	public void loadMenu(String menu_status){
