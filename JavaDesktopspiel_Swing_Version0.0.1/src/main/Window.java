@@ -28,7 +28,6 @@ public class Window extends JFrame{
 			this.window_width = 1920;
 			this.window_height = 1080;
 		}
-		this.updateWindowSize();
 	}
 	
 	public void updateWindowSize(){

@@ -1,13 +1,11 @@
 package main;
 
-import java.awt.Color;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 import javax.swing.JComboBox;
-import javax.swing.JSlider;
 
-public class MenuSelection /*extends JSlider*/ {
+public class MenuSelection /*extends JSlider*/{
 	/*
 	public MenuSelection(String[] text, int y_difference, int button_width, int button_height, Window window){
 		this.setBounds((window.getWidth()/2)-(button_width/2), (window.getHeight()/2)-(button_height/2)+y_difference, button_width, button_height);
@@ -21,8 +19,22 @@ public class MenuSelection /*extends JSlider*/ {
 	
 	private JComboBox selection_box;
 	
-	public MenuSelection(String[] text, int y_difference, int button_width, int button_height, Window window){
+	public MenuSelection(String[] text, int y_difference, int button_width, int button_height, int selected_index, Window window){
 		selection_box = new JComboBox(text);
+		
+		/*
+		selection_box.setBackground(Color.DARK_GRAY);
+		selection_box.setFocusable(false);
+		selection_box.setForeground(Color.WHITE);
+		for (int i = 0; i < selection_box.getComponentCount(); i++) {
+			if (selection_box.getComponent(i) instanceof JComponent) {
+		        ((JComponent) selection_box.getComponent(i)).setBorder(null);
+		    }
+		}
+		*/
+		
+		selection_box.setBounds((window.getWidth()/2)-(button_width/2), (window.getHeight()/2)-(button_height/2)+y_difference, button_width, button_height);
+		selection_box.setSelectedIndex(selected_index);
 		selection_box.addItemListener(
 			new ItemListener(){
 				@Override
@@ -33,7 +45,6 @@ public class MenuSelection /*extends JSlider*/ {
 				}
 			}
 		);
-		selection_box.setBounds((window.getWidth()/2)-(button_width/2), (window.getHeight()/2)-(button_height/2)+y_difference, button_width, button_height);
 		window.add(selection_box);
 		window.validate();
 	}

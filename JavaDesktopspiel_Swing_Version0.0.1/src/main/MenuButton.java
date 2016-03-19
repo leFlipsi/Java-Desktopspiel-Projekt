@@ -12,6 +12,5 @@ public class MenuButton extends JButton{
 		this.setBorderPainted(false);
 		this.setFocusPainted(false);
 		window.add(this);
-		window.validate();
 	}
 }
