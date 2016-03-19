@@ -27,6 +27,7 @@ public class Menu {
 			s_options = new MenuButton(TextVars.menu_options, 64, button_width, button_height, window);
 		}
 		if(type == "options"){	
+			// o_windowscale = new MenuSelection(o_scales, -64, button_width, button_height, window);
 			o_windowscale = new MenuSelection(o_scales, -64, button_width, button_height, window);
 			o_apply = new MenuButton(TextVars.menu_loadgame, 0, button_width, button_height, window);
 			o_back = new MenuButton(TextVars.menu_options, 64, button_width, button_height, window);

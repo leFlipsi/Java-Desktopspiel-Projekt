@@ -8,11 +8,31 @@ public class Window extends JFrame{
 	
 	public Window(String title){
 		this.setTitle(title);
-		this.setSize(this.window_width, this.window_height);
+		this.updateWindowSize();
 		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLayout(null);
 		this.setVisible(true);
+	}
+	
+	public void setSize(String size){
+		if(size == "1024x576"){
+			this.window_width = 1024;
+			this.window_height = 576;
+		}
+		if(size == "800x450"){
+			this.window_width = 800;
+			this.window_height = 450;
+		}
+		if(size == "1920x1080"){
+			this.window_width = 1920;
+			this.window_height = 1080;
+		}
+		this.updateWindowSize();
+	}
+	
+	public void updateWindowSize(){
+		this.setSize(window_width, window_height);
 	}
 	
 	public int getWindowWidth(){
@@ -20,11 +40,5 @@ public class Window extends JFrame{
 	}
 	public int getWindowHeight(){
 		return this.window_height;
-	}
-	public void setWindowWidth(int w){
-		this.window_width = w;
-	}
-	public void setWindowHeight(int h){
-		this.window_height = h;
 	}
 }
