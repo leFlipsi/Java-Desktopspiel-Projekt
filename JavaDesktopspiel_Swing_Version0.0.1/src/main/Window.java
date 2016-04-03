@@ -15,6 +15,7 @@ public class Window extends JFrame{
 		this.setVisible(true);
 	}
 	
+	/* ZU JComboBox MenuSelection
 	public void setSizeVariables(String size){
 		if(size == "1024x576"){
 			this.window_width = 1024;
@@ -29,7 +30,13 @@ public class Window extends JFrame{
 			this.window_height = 1080;
 		}
 	}
+	*/
 	
+	
+	public void resetWindowScale(int w, int h){
+		this.window_width = w;
+		this.window_height = h;
+	}
 	public void updateWindowSize(){
 		this.setSize(window_width, window_height);
 	}

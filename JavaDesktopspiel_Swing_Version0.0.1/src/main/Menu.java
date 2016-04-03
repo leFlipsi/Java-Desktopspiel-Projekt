@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JLabel;
 import konstanten.*;
 
-public class Menu {	
+public class Menu implements ActionListener{	
 	Window window;
 	private int button_width = 192;
 	private int button_height = 32;
@@ -22,17 +22,16 @@ public class Menu {
 		start_buttons = new MenuButton[3];
 		option_buttons = new MenuButton[3];
 		this.window = window;
+		initButtons();
 		setMenu(type);
 	}
 	
 	public void setMenu(String type){
-		initButtons();
+		hideButtons(option_buttons, 0);
+		hideButtons(start_buttons, 0);
 		if(type == "start"){	
-			hideButtons(option_buttons, 0);
 			showButtons(start_buttons, 0);
-		}
-		if(type == "options"){	
-			hideButtons(start_buttons, 0);
+		}else if(type == "options"){	
 			showButtons(option_buttons, 0);
 		}
 		window.repaint();
@@ -40,11 +39,13 @@ public class Menu {
 	public void initButtons(){
 		for(int i = 0; i < start_buttons.length; i++){
 			start_buttons[i] = new MenuButton(TextVars.start_button_text[i], (i*64)-64, button_width, button_height, window);
+			start_buttons[i].addActionListener(this);
 		}
 		for(int i = 0; i < option_buttons.length; i++){
 			option_buttons[i] = new MenuButton(TextVars.option_button_text[i], (i*64)-64, button_width, button_height, window);
+			option_buttons[i].addActionListener(this);
 		}
-		o_windowscaleList = new MenuSelection(o_scales, -64, button_width, button_height, window);
+		o_windowscaleList = new MenuSelection(o_scales, -64, button_width, button_height, window, this);
 	}
 	public void hideButtons(MenuButton[] button_list, int start){
 		for(int i = start; i < button_list.length; i++){
@@ -57,6 +58,29 @@ public class Menu {
 		}
 	}
 
-	// EVENT LISTENERS
 	
+
+	// EVENT LISTENERS
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource() == this.start_buttons[0]){				//Spielstand ERSTELLEN
+			//TODO
+        }else if(e.getSource() == this.start_buttons[1]){		//Spielstand LADEN
+        	//TODO
+        }else if(e.getSource() == this.start_buttons[2]){		//Optionen
+            setMenu("options");
+        }	
+		if(e.getSource() == this.option_buttons[0]){			//Fenstergröße:
+			hideButtons(option_buttons, 1);
+			o_windowscaleList.showList();
+        }else if(e.getSource() == this.option_buttons[1]){		//Anwenden
+        	window.updateWindowSize();
+        	this.hideButtons(option_buttons, 0); 										//TODO WAS IST DA LOS?
+        	this.initButtons();
+        	this.setMenu("start");
+        }else if(e.getSource() == this.option_buttons[2]){		//Zurück
+            window.keepWindowSize();
+            setMenu("start");
+        }
+	}
 }

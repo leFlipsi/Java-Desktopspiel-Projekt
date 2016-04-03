@@ -17,9 +17,6 @@ public class MainClass {
 	}
 	static void start(){
 		main_window = new Window(TextVars.window_title);
-		loadMenu("start");
-	}
-	static void loadMenu(String menu_status){
-		menu = new Menu(main_window, menu_status);
+		menu = new Menu(main_window, "start");
 	}
 }

@@ -1,6 +1,8 @@
 package main;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import javax.swing.JButton;
@@ -8,10 +10,12 @@ import javax.swing.JComboBox;
 
 import konstanten.TextVars;
 
-public class MenuSelection /*extends JSlider*/ implements TextVars{
+public class MenuSelection /*extends JSlider*/ implements TextVars, ActionListener{
 	
 	private JComboBox selection_box;
 	private MenuButton[] list;
+	private Window window;
+	private Menu menu;
 	
 	/*
 	public MenuSelection(String[] text, int y_difference, int button_width, int button_height, Window window){
@@ -55,10 +59,13 @@ public class MenuSelection /*extends JSlider*/ implements TextVars{
 	}
 	*/
 	
-	public MenuSelection(String[] text, int y_difference, int button_width, int button_height, Window window){
+	public MenuSelection(String[] text, int y_difference, int button_width, int button_height, Window window, Menu menu){
+		this.window = window;
+		this.menu = menu;
 		list = new MenuButton[text.length];
 		for(int i = 0; i < text.length; i++){
-			list[i] = new MenuButton(text[i], y_difference+((i+1)*button_height), button_width, button_height, window);
+			list[i] = new MenuButton(text[i], y_difference+(3+i)+((i+1)*button_height), button_width, button_height, window);
+			list[i].addActionListener(this);
 		}
 		hideList();
 	}
@@ -72,5 +79,18 @@ public class MenuSelection /*extends JSlider*/ implements TextVars{
 		for(int i = 0; i < list.length; i++){
 			list[i].setVisible(false);
 		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource() == list[0]){
+			window.resetWindowScale(800, 450);
+		}else if(e.getSource() == list[1]){
+			window.resetWindowScale(1024, 576);
+		}else if(e.getSource() == list[2]){
+			window.resetWindowScale(1920, 1080);
+		}
+		this.hideList();
+		menu.setMenu("options");
 	}
 }
