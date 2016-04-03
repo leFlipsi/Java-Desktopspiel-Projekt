@@ -8,10 +8,6 @@ public interface TextVars {
 	/*
 	 * Menüvariablen
 	 */
-	public String menu_creategame = "Neuen Spielstand Erstellen";
-	public String menu_loadgame = "Spielstand laden";
-	public String menu_options = "Optionen";
-	public String menu_skalierung = "Auswahl der Fenstergröße:";
-	public String menu_apply = "Anwenden";
-	public String menu_back = "Zurück";
+	public String[] start_button_text = {"Neuen Spielstand Erstellen", "Spielstand laden", "Optionen"};
+	public String[] option_button_text = {"Fenstergröße:", "Anwenden", "Zurück"};
 }

@@ -15,7 +15,7 @@ public class Window extends JFrame{
 		this.setVisible(true);
 	}
 	
-	public void setSize(String size){
+	public void setSizeVariables(String size){
 		if(size == "1024x576"){
 			this.window_width = 1024;
 			this.window_height = 576;
@@ -33,11 +33,8 @@ public class Window extends JFrame{
 	public void updateWindowSize(){
 		this.setSize(window_width, window_height);
 	}
-	
-	public int getWindowWidth(){
-		return this.window_width;
-	}
-	public int getWindowHeight(){
-		return this.window_height;
+	public void keepWindowSize(){
+		this.window_width = this.getWidth();
+		this.window_height = this.getHeight();
 	}
 }

@@ -13,7 +13,6 @@ public class MainClass {
 		main_window = new Window(TextVars.window_title);
 		loadMenu("options");
 	}
-	
 	public void loadMenu(String menu_status){
 		menu = new Menu(main_window, menu_status);
 	}
