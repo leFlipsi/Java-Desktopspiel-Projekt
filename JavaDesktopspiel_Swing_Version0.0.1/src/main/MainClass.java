@@ -1,19 +1,25 @@
 package main;
 
+import javax.swing.SwingUtilities;
+
 import konstanten.TextVars;
 
 public class MainClass {
-	private Window main_window;
-	private Menu menu;
+	static Window main_window;
+	static Menu menu;
 	
 	public static void main(String[] args) {
-		MainClass start = new MainClass();
+		SwingUtilities.invokeLater(new Runnable(){
+			public void run(){
+	        	start();
+			}
+		});
 	}
-	public MainClass(){
+	static void start(){
 		main_window = new Window(TextVars.window_title);
-		loadMenu("options");
+		loadMenu("start");
 	}
-	public void loadMenu(String menu_status){
+	static void loadMenu(String menu_status){
 		menu = new Menu(main_window, menu_status);
 	}
 }

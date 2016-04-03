@@ -56,7 +56,6 @@ public class MenuSelection /*extends JSlider*/ implements TextVars{
 	*/
 	
 	public MenuSelection(String[] text, int y_difference, int button_width, int button_height, Window window){
-		/*	MENU SELECTION MIT JButtons */
 		list = new MenuButton[text.length];
 		for(int i = 0; i < text.length; i++){
 			list[i] = new MenuButton(text[i], y_difference+((i+1)*button_height), button_width, button_height, window);
