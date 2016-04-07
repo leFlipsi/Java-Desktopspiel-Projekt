@@ -1,11 +1,10 @@
 package main;
 
 import java.awt.Color;
-import java.awt.Insets;
-
 import javax.swing.BorderFactory;
 import javax.swing.JTextField;
 
+@SuppressWarnings("serial")
 public class MenuTextfield extends JTextField {
 	public MenuTextfield(String default_text, int y_difference, int field_width, int field_height, Window window){
 		super(default_text);

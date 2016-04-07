@@ -12,10 +12,11 @@ import konstanten.TextVars;
 
 public class MenuSelection /*extends JSlider*/ implements TextVars, ActionListener{
 	
-	private JComboBox selection_box;
+	//private JComboBox selection_box;
 	private MenuButton[] list;
 	private Window window;
 	private Menu menu;
+	private int y_difference, button_width, button_height;
 	
 	/*
 	public MenuSelection(String[] text, int y_difference, int button_width, int button_height, Window window){
@@ -62,6 +63,9 @@ public class MenuSelection /*extends JSlider*/ implements TextVars, ActionListen
 	public MenuSelection(String[] text, int y_difference, int button_width, int button_height, Window window, Menu menu){
 		this.window = window;
 		this.menu = menu;
+		this.y_difference = y_difference;
+		this.button_width = button_width;
+		this.button_height = button_height;
 		list = new MenuButton[text.length];
 		for(int i = 0; i < text.length; i++){
 			list[i] = new MenuButton(text[i], y_difference+(3+i)+((i+1)*button_height), button_width, button_height, window);
@@ -78,6 +82,12 @@ public class MenuSelection /*extends JSlider*/ implements TextVars, ActionListen
 	public void hideList(){
 		for(int i = 0; i < list.length; i++){
 			list[i].setVisible(false);
+		}
+	}
+	
+	public void resetBounds(){
+		for(int i = 0; i < list.length; i++){
+			list[i].setBounds((window.getWidth()/2)-(button_width/2), (window.getHeight()/2)-(button_height/2)+this.y_difference, button_width, button_height);
 		}
 	}
 

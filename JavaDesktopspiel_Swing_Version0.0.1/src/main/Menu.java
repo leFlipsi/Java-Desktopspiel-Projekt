@@ -2,7 +2,10 @@ package main;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JLabel;
+import java.io.File;
+
+import javax.swing.JFileChooser;
+
 import konstanten.*;
 
 public class Menu implements ActionListener{	
@@ -14,11 +17,7 @@ public class Menu implements ActionListener{
 	private MenuButton[] create_buttons;
 	private MenuTextfield[] create_fields;
 	private MenuSelection o_windowscaleList;
-	private String[] o_scales = {
-			"800x450",
-			"1024x576",
-			"1920x1080"
-	};
+	private String[] o_scales = {"800x450", "1024x576", "1920x1080"};
 	
 	public Menu(Window window, String type) {
 		start_buttons = new MenuButton[3];
@@ -31,10 +30,7 @@ public class Menu implements ActionListener{
 	}
 	
 	public void setMenu(String type){
-		hideButtons(option_buttons, 0);
-		hideButtons(start_buttons, 0);
-		hideButtons(create_buttons, 0);
-		hideTextfields(create_fields);
+		hideAllButtons();
 		if(type == "start"){	
 			showButtons(start_buttons, 0);
 		}else if(type == "options"){	
@@ -43,8 +39,15 @@ public class Menu implements ActionListener{
 			showButtons(create_buttons, 0);
 			showTextfields(create_fields);
 		}
-		window.repaint();
+		window.getContentPane().repaint();
 	}
+	public void hideAllButtons(){
+		hideButtons(option_buttons, 0);
+		hideButtons(start_buttons, 0);
+		hideButtons(create_buttons, 0);
+		hideTextfields(create_fields);
+	}
+	
 	public void initButtons(){
 		for(int i = 0; i < start_buttons.length; i++){
 			start_buttons[i] = new MenuButton(TextVars.start_button_text[i], (i*64)-64, button_width, button_height, window);
@@ -84,6 +87,10 @@ public class Menu implements ActionListener{
 		}
 	}
 
+	public void saveGame(String char_name, String game_name){
+		JFileChooser file_c = new JFileChooser();
+		file_c.setCurrentDirectory(new File( "./"));
+	}
 	// EVENT LISTENERS
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -94,21 +101,25 @@ public class Menu implements ActionListener{
         }else if(e.getSource() == this.start_buttons[2]){		//Optionen
             setMenu("options");
         }	
+		
 		if(e.getSource() == this.option_buttons[0]){			//Fenstergröße:
 			hideButtons(option_buttons, 1);
 			o_windowscaleList.showList();
         }else if(e.getSource() == this.option_buttons[1]){		//Anwenden
-        	window.updateWindowSize();
-        	this.hideButtons(option_buttons, 0); 										//TODO WAS IST DA LOS?
-        	this.initButtons();
+        	window.updateWindowSize();		
+        	start_buttons[0].resetBounds(start_buttons);
+        	option_buttons[0].resetBounds(option_buttons);
+        	o_windowscaleList.resetBounds();
         	this.setMenu("start");
         }else if(e.getSource() == this.option_buttons[2]){		//Zurück
             window.keepWindowSize();
             setMenu("start");
         }
-		if(e.getSource() == this.create_buttons[0]){			//Fenstergröße:
-			//TODO
-        }else if(e.getSource() == this.create_buttons[1]){		//Anwenden
+		
+		if(e.getSource() == this.create_buttons[0]){			//
+			//create_fields[0].getText();
+			saveGame(create_fields[0].getText(), create_fields[1].getText());
+        }else if(e.getSource() == this.create_buttons[1]){		//Abbrechen
         	setMenu("start");
         }
 	}
