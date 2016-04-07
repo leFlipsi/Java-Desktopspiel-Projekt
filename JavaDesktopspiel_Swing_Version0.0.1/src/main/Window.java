@@ -2,6 +2,7 @@ package main;
 
 import javax.swing.JFrame;
 
+@SuppressWarnings("serial")
 public class Window extends JFrame{
 	private int window_width = 1024;
 	private int window_height = 576;
@@ -31,7 +32,6 @@ public class Window extends JFrame{
 		}
 	}
 	*/
-	
 	
 	public void resetWindowScale(int w, int h){
 		this.window_width = w;

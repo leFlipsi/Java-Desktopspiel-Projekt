@@ -1,12 +1,7 @@
 package main;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
 
 import konstanten.TextVars;
 
@@ -87,7 +82,7 @@ public class MenuSelection /*extends JSlider*/ implements TextVars, ActionListen
 	
 	public void resetBounds(){
 		for(int i = 0; i < list.length; i++){
-			list[i].setBounds((window.getWidth()/2)-(button_width/2), (window.getHeight()/2)-(button_height/2)+this.y_difference, button_width, button_height);
+			list[i].setBounds((window.getWidth()/2)-(button_width/2), (window.getHeight()/2)-(button_height/2)+(this.y_difference+(3+i)+((i+1)*button_height)), button_width, button_height);
 		}
 	}
 

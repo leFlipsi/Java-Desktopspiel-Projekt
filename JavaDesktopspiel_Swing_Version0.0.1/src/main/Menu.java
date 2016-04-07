@@ -2,9 +2,12 @@ package main;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
-
-import javax.swing.JFileChooser;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.util.ArrayList;
 
 import konstanten.*;
 
@@ -18,6 +21,10 @@ public class Menu implements ActionListener{
 	private MenuTextfield[] create_fields;
 	private MenuSelection o_windowscaleList;
 	private String[] o_scales = {"800x450", "1024x576", "1920x1080"};
+	private File file;
+	private BufferedWriter bw;
+	private BufferedReader br;
+	private ArrayList<String> savetxt;
 	
 	public Menu(Window window, String type) {
 		start_buttons = new MenuButton[3];
@@ -88,9 +95,29 @@ public class Menu implements ActionListener{
 	}
 
 	public void saveGame(String char_name, String game_name){
-		JFileChooser file_c = new JFileChooser();
-		file_c.setCurrentDirectory(new File( "./"));
+		file = new File("./src/files/save.txt");
+		
+		try {
+			savetxt = new ArrayList<String>();
+			String x;
+			br = new BufferedReader(new FileReader(file));
+            while ((x = br.readLine()) != null) {
+            	savetxt.add(x);
+			}
+            bw = new BufferedWriter(new FileWriter(file)); 			//Löscht INHALT!!!
+            for(int i = 0; i < savetxt.size(); i++){
+                bw.write(savetxt.get(i));
+                bw.newLine();
+            }
+            bw.append(char_name + "|" + game_name + "|");
+            bw.flush();
+            bw.close();
+            //create_buttons[0].setEnabled(false);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
 	}
+	
 	// EVENT LISTENERS
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -109,6 +136,8 @@ public class Menu implements ActionListener{
         	window.updateWindowSize();		
         	start_buttons[0].resetBounds(start_buttons);
         	option_buttons[0].resetBounds(option_buttons);
+        	create_buttons[0].resetBounds(create_buttons);
+        	create_fields[0].resetBounds(create_fields);
         	o_windowscaleList.resetBounds();
         	this.setMenu("start");
         }else if(e.getSource() == this.option_buttons[2]){		//Zurück
