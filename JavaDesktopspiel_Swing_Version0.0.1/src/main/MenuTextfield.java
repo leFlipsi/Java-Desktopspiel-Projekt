@@ -15,6 +15,7 @@ public class MenuTextfield extends JTextField {
 		this.y_difference = y_difference;
 		this.field_width = field_width;
 		this.field_height = field_height;
+		this.setCaretColor(Color.WHITE);
 		this.resetBounds(this);
 		this.setForeground(Color.WHITE);
 		this.setBackground(Color.DARK_GRAY);
