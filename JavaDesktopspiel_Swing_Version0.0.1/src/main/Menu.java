@@ -15,6 +15,7 @@ public class Menu implements ActionListener{
 	Window window;
 	private int button_width = 192;
 	private int button_height = 32;
+	private int button_difference = 64;
 	private MenuButton[] start_buttons;
 	private MenuButton[] option_buttons;
 	private MenuButton[] create_buttons;
@@ -25,6 +26,12 @@ public class Menu implements ActionListener{
 	private BufferedWriter bw;
 	private BufferedReader br;
 	private ArrayList<String> savetxt;
+	private String readerString;
+	private String[] savetxt_array;
+	private String[] id;
+	private String[] charactername;
+	private String[] spielstandname;
+
 	
 	public Menu(Window window, String type) {
 		start_buttons = new MenuButton[3];
@@ -32,6 +39,7 @@ public class Menu implements ActionListener{
 		create_buttons = new MenuButton[2];
 		create_fields = new MenuTextfield[2];
 		this.window = window;
+		file = new File("./src/files/save.txt");
 		initButtons();
 		setMenu(type);
 	}
@@ -57,21 +65,21 @@ public class Menu implements ActionListener{
 	
 	public void initButtons(){
 		for(int i = 0; i < start_buttons.length; i++){
-			start_buttons[i] = new MenuButton(TextVars.start_button_text[i], (i*64)-64, button_width, button_height, window);
+			start_buttons[i] = new MenuButton(TextVars.start_button_text[i], (i*button_difference)-button_difference, button_width, button_height, window);
 			start_buttons[i].addActionListener(this);
 		}
 		for(int i = 0; i < option_buttons.length; i++){
-			option_buttons[i] = new MenuButton(TextVars.option_button_text[i], (i*64)-64, button_width, button_height, window);
+			option_buttons[i] = new MenuButton(TextVars.option_button_text[i], (i*button_difference)-button_difference, button_width, button_height, window);
 			option_buttons[i].addActionListener(this);
 		}
 		for(int i = 0; i < create_buttons.length; i++){
-			create_buttons[i] = new MenuButton(TextVars.create_button_text[i], ((create_fields.length)*64)-64, i, button_width/2, button_height, window);
+			create_buttons[i] = new MenuButton(TextVars.create_button_text[i], ((create_fields.length)*button_difference)-button_difference, i, button_width/2, button_height, window);
 			create_buttons[i].addActionListener(this);
 		}
 		for(int i = 0; i < create_fields.length; i++){
-			create_fields[i] = new MenuTextfield(TextVars.create_fields_text[i], (i*64)-64, button_width, button_height, window);
+			create_fields[i] = new MenuTextfield(TextVars.create_fields_text[i], (i*button_difference)-button_difference, button_width, button_height, window);
 		}
-		o_windowscaleList = new MenuSelection(o_scales, -64, button_width, button_height, window, this);
+		o_windowscaleList = new MenuSelection(o_scales, -button_difference, button_width, button_height, window, this);
 	}
 	public void hideButtons(MenuButton[] button_list, int start){
 		for(int i = start; i < button_list.length; i++){
@@ -95,27 +103,51 @@ public class Menu implements ActionListener{
 	}
 
 	public void saveGame(String char_name, String game_name){
-		file = new File("./src/files/save.txt");
-		
+		create_buttons[0].setEnabled(false);
 		try {
-			savetxt = new ArrayList<String>();
-			String x;
-			br = new BufferedReader(new FileReader(file));
-            while ((x = br.readLine()) != null) {
-            	savetxt.add(x);
-			}
-            bw = new BufferedWriter(new FileWriter(file)); 			//Löscht INHALT!!!
+			loadToArraylist();
+            bw = new BufferedWriter(new FileWriter(file)); 			//Löscht Inhalt!!!
             for(int i = 0; i < savetxt.size(); i++){
                 bw.write(savetxt.get(i));
                 bw.newLine();
             }
-            bw.append(char_name + "|" + game_name + "|");
+            bw.append((savetxt.size()+1) + "|" + char_name + "|" + game_name + "|");
             bw.flush();
             bw.close();
-            //create_buttons[0].setEnabled(false);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+	}
+	public void explodeArraylistItems(){
+		loadToArraylist();
+		savetxt_array = new String[savetxt.size()];
+		id = new String[savetxt.size()];
+		charactername = new String[savetxt.size()];
+		spielstandname = new String[savetxt.size()];
+		//TODO
+		savetxt_array = savetxt.toArray(savetxt_array);
+		for(int i = 0; i < savetxt_array.length; i++){
+			id[i] = savetxt_array[i].substring(0, savetxt_array[i].indexOf("|"));
+			shortSavetxt(i);
+			charactername[i] = savetxt_array[i].substring(0, savetxt_array[i].indexOf("|"));
+			shortSavetxt(i);
+			spielstandname[i] = savetxt_array[i].substring(0, savetxt_array[i].indexOf("|"));
+			shortSavetxt(i);
+		}
+	}
+	public void shortSavetxt(int i){
+		savetxt_array[i] = savetxt_array[i].substring(savetxt_array[i].indexOf("|")+1, savetxt_array[i].length());
+	}
+	public void loadToArraylist(){
+		try{
+			savetxt = new ArrayList<String>();
+			br = new BufferedReader(new FileReader(file));
+            while ((readerString = br.readLine()) != null) {
+            	savetxt.add(readerString);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	// EVENT LISTENERS
@@ -140,6 +172,7 @@ public class Menu implements ActionListener{
         	create_fields[0].resetBounds(create_fields);
         	o_windowscaleList.resetBounds();
         	this.setMenu("start");
+        	window.setLocationRelativeTo(null);
         }else if(e.getSource() == this.option_buttons[2]){		//Zurück
             window.keepWindowSize();
             setMenu("start");
