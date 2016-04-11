@@ -54,6 +54,7 @@ public class Menu implements ActionListener{
 			showButtons(create_buttons, 0);
 			showTextfields(create_fields);
 		}
+		//Bild laden
 		window.getContentPane().repaint();
 	}
 	public void hideAllButtons(){
