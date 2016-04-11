@@ -2,7 +2,7 @@ package main;
 
 import javax.swing.SwingUtilities;
 import konstanten.TextVars;
-
+//
 public class MainClass {
 	static Window main_window;
 	static Menu menu;
