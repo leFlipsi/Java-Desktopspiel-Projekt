@@ -8,11 +8,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
-
 import konstanten.*;
 
 public class Menu implements ActionListener{	
-	Window window;
+	private Window window;
 	private int button_width = 192;
 	private int button_height = 32;
 	private int button_difference = 64;
@@ -134,6 +133,10 @@ public class Menu implements ActionListener{
 			shortSavetxt(i);
 			spielstandname[i] = savetxt_array[i].substring(0, savetxt_array[i].indexOf("|"));
 			shortSavetxt(i);
+			
+			System.out.println(id[i]);
+			System.out.println(charactername[i]);
+			System.out.println(spielstandname[i]);
 		}
 	}
 	public void shortSavetxt(int i){
@@ -146,6 +149,7 @@ public class Menu implements ActionListener{
             while ((readerString = br.readLine()) != null) {
             	savetxt.add(readerString);
 			}
+            br.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
