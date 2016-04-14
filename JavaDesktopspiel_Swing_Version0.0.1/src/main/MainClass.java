@@ -19,4 +19,3 @@ public class MainClass {
 		menu = new Menu(main_window, "start");
 	}
 }
-//Hallo rrrr

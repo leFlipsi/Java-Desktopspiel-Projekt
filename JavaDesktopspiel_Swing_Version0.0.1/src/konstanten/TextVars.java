@@ -10,6 +10,6 @@ public interface TextVars {
 	 */
 	public String[] start_button_text = {"Neuen Spielstand erstellen", "Spielstand laden", "Optionen"};
 	public String[] option_button_text = {"Fenstergröße:", "Anwenden", "Zurück"};
-	public String[] create_button_text = {"Erstellen", "Abbrechen"};
+	public String[] create_button_text = {"Abbrechen", "Erstellen"};
 	public String[] create_fields_text = {"Charaktername", "Spielstandname"};
 }
