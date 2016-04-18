@@ -8,13 +8,18 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
+
+import buttons.MenuButton;
+import buttons.MenuSelection;
 import konstanten.*;
+import textfields.MenuShowtext;
+import textfields.MenuTextfield;
 
 public class Menu implements ActionListener{	
 	private Window window;
-	private int button_width, button_height, button_difference;
-	private MenuButton[] start_buttons, option_buttons, create_buttons, load_buttons;
-	private MenuTextfield[] create_fields, load_fields;
+	private int button_width, button_height, button_difference, field_difference;
+	private MenuButton[] start_buttons, option_buttons, create_buttons;
+	private MenuTextfield[] create_fields;
 	private MenuSelection o_windowscaleList;
 	private String[] o_scales = {"800x450", "1024x576", "1920x1080"};
 	private File file;
@@ -23,27 +28,28 @@ public class Menu implements ActionListener{
 	private ArrayList<String> savetxt;
 	private String readerString;
 	private String[] savetxt_array, id, charactername, spielstandname;
+	private MenuShowtext[] load_showtext;
 	
 	public Menu(Window window, String type) {
 		this.start_buttons = new MenuButton[3];
 		this.option_buttons = new MenuButton[3];
 		this.create_buttons = new MenuButton[2];
 		this.create_fields = new MenuTextfield[2];
-		this.load_buttons = new MenuButton[2];
-		this.load_fields = new MenuTextfield[2];
+		this.load_showtext = new MenuShowtext[3];
 		this.window = window;
 		this.file = new File("./src/files/save.txt");
 		
 		this.button_width = 192;
 		this.button_height = 32;
 		this.button_difference = 64;
+		this.field_difference = -128;
 		
 		initButtons();
 		setMenu(type);
 	}
 	
 	public void setMenu(String type){
-		hideAllButtons();
+		hideAll();
 		if(type == "start"){	
 			showButtons(start_buttons, 0);
 		}else if(type == "options"){	
@@ -51,20 +57,14 @@ public class Menu implements ActionListener{
 		}else if(type == "create_game"){
 			showButtons(create_buttons, 0);
 			showTextfields(create_fields);
-		}else if(type == "load"){
-			showButtons(load_buttons, 0);
-			showTextfields(load_fields);
+		}else if(type == "load_game"){
+			showShowTexts(load_showtext);
 		}
 		window.getContentPane().repaint();
 	}
 	
-	public void hideAllButtons(){
-		hideButtons(option_buttons, 0);
-		hideButtons(start_buttons, 0);
-		hideButtons(create_buttons, 0);
-		hideTextfields(create_fields);
-	}
 	public void initButtons(){
+		explodeArraylistItems();
 		for(int i = 0; i < start_buttons.length; i++){
 			start_buttons[i] = new MenuButton(TextVars.start_button_text[i], (i*button_difference)-button_difference, button_width, button_height, window);
 			start_buttons[i].addActionListener(this);
@@ -79,6 +79,13 @@ public class Menu implements ActionListener{
 		}
 		for(int i = 0; i < create_fields.length; i++){
 			create_fields[i] = new MenuTextfield(TextVars.create_fields_text[i], (i*button_difference)-button_difference, button_width, button_height, window);
+		}
+		for(int i = 0; i < load_showtext.length; i++){
+			try{
+				load_showtext[i] = new MenuShowtext(spielstandname[i], charactername[i], id[i], i,(int)(button_width*1.5), button_height*2, field_difference, window);
+			}catch(Exception e){
+				
+			}
 		}
 		o_windowscaleList = new MenuSelection(o_scales, -button_difference, button_width, button_height, window, this);
 	}
@@ -101,6 +108,31 @@ public class Menu implements ActionListener{
 		for(int i = 0; i < field_list.length; i++){
 			field_list[i].setVisible(true);
 		}
+	}
+	public void hideShowTexts(MenuShowtext[] text, int start){
+		for(int i = start; i < text.length; i++){
+			if(load_showtext[i] != null){
+				text[i].setVisible(false);
+			}else{
+				i += 3;
+			}
+		}
+	}
+	public void showShowTexts(MenuShowtext[] text){
+		for(int i = 0; i < text.length; i++){
+			if(load_showtext[i] != null){
+				text[i].setVisible(true);
+			}else{
+				i += 3;
+			}
+		}
+	}
+	public void hideAll(){
+		hideButtons(option_buttons, 0);
+		hideButtons(start_buttons, 0);
+		hideButtons(create_buttons, 0);
+		hideTextfields(create_fields);
+		hideShowTexts(load_showtext, 0);
 	}
 
 	public void saveGame(String char_name, String game_name){
@@ -133,10 +165,6 @@ public class Menu implements ActionListener{
 			shortSavetxt(i);
 			spielstandname[i] = savetxt_array[i].substring(0, savetxt_array[i].indexOf("|"));
 			shortSavetxt(i);
-			
-			System.out.println(id[i]);
-			System.out.println(charactername[i]);
-			System.out.println(spielstandname[i]);
 		}
 	}
 	public void shortSavetxt(int i){
@@ -154,17 +182,13 @@ public class Menu implements ActionListener{
 			e.printStackTrace();
 		}
 	}
-	
-	public void loadGame(){
-		//TODO
-	}
 	// EVENT LISTENERS
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == this.start_buttons[0]){				//Spielstand ERSTELLEN
 			setMenu("create_game");
         }else if(e.getSource() == this.start_buttons[1]){		//Spielstand LADEN
-        	setMenu("laden");
+        	setMenu("load_game");
         }else if(e.getSource() == this.start_buttons[2]){		//Optionen
             setMenu("options");
         }	

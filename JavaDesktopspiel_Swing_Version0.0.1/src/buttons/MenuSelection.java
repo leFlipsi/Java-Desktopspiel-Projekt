@@ -1,8 +1,11 @@
-package main;
+package buttons;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import konstanten.TextVars;
+import main.Menu;
+import main.Window;
 
 public class MenuSelection implements TextVars, ActionListener{
 	
