@@ -198,9 +198,9 @@ public class Menu implements ActionListener{
 			o_windowscaleList.showList();
         }else if(e.getSource() == this.option_buttons[1]){		//Anwenden
         	window.updateWindowSize();		
-        	start_buttons[0].resetBounds(start_buttons);
-        	option_buttons[0].resetBounds(option_buttons);
-        	create_buttons[0].resetBounds(create_buttons);
+        	start_buttons[0].setButtonBounds(start_buttons);
+        	option_buttons[0].setButtonBounds(option_buttons);
+        	create_buttons[0].setButtonBounds(create_buttons);
         	create_fields[0].resetBounds(create_fields);
         	o_windowscaleList.resetBounds();
         	setMenu("start");

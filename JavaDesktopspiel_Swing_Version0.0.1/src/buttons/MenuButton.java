@@ -2,33 +2,28 @@ package buttons;
 
 import java.awt.Color;
 import javax.swing.JButton;
-
 import main.Window;
 
 @SuppressWarnings("serial")
 public class MenuButton extends JButton {
-	private int y_difference, button_width, button_height, lr;
+	private int x, y, width, height, lr, y_difference;
 	private Window window;
 	
 	public MenuButton(String text, int y_difference, int button_width, int button_height, Window window){
 		this.lr = -1;
-		this.setPrivateVars(y_difference, button_width, button_height, window);
-		this.resetBounds();
-		this.setStandards(text, window);
+		this.setStandards(text, button_width, button_height, window, y_difference);
+		this.setButtonBounds();
 	}
 	public MenuButton(String text, int y_difference, int lr, int button_width, int button_height, Window window){
 		this.lr = lr;
-		this.setPrivateVars(y_difference, button_width, button_height, window);
-		this.resetBounds();
-		this.setStandards(text, window);
+		this.setStandards(text, button_width, button_height, window, y_difference);
+		this.setButtonBounds();
 	}
-	public void setPrivateVars(int y_difference, int button_width, int button_height, Window window){
+	private void setStandards(String text, int button_width, int button_height, Window window, int y_difference){
 		this.y_difference = y_difference;
-		this.button_width = button_width;
-		this.button_height = button_height;
 		this.window = window;
-	}
-	private void setStandards(String text, Window window){
+		this.width = button_width;
+		this.height = button_height;
 		this.setText(text);
 		this.setBackground(Color.DARK_GRAY);
 		this.setForeground(Color.WHITE);
@@ -38,28 +33,28 @@ public class MenuButton extends JButton {
 		//this.setContentAreaFilled(false);
 		window.add(this);
 	}
-
-	public void resetBounds(MenuButton[] list){		//Reset MenuButton list bounds
-		for(int i = 0; i < list.length; i++){
-			if(lr == -1){
-				list[i].setBounds((window.getWidth()/2)-(button_width/2), (window.getHeight()/2)-(button_height/2)+list[i].y_difference, button_width, button_height);
-			}else{
-				resetBoundsHalfButtons(list[i]);
-			}
-		}
-	}
-	public void resetBounds(){						//Reset single MenuButton bounds
+	public void setPosition(){
 		if(lr == -1){
-			this.setBounds((window.getWidth()/2)-(button_width/2), (window.getHeight()/2)-(button_height/2)+this.y_difference, button_width, button_height);
-		}else{
-			resetBoundsHalfButtons(this);
+			this.x = (window.getWidth()/2)-(width/2);
+		}else if(lr == 0){
+			this.x = (window.getWidth()/2)-(width/2)-width/2;
+		}else if(lr == 1){
+			this.x = (window.getWidth()/2)-(width/2)+width/2;
 		}
+		this.y = (window.getHeight()/2)-(height/2)+y_difference;
 	}
-	public void resetBoundsHalfButtons(MenuButton button){
-		if(button.lr == 0){
-			button.setBounds((window.getWidth()/2)-(button_width/2)-button_width/2, (window.getHeight()/2)-(button_height/2)+button.y_difference, button_width, button_height);
-		}else if(button.lr == 1){
-			button.setBounds((window.getWidth()/2)-(button_width/2)+button_width/2, (window.getHeight()/2)-(button_height/2)+button.y_difference, button_width, button_height);
+	public void setYPosition(int i){
+		this.y = y-y_difference*i;
+	}
+	public void setButtonBounds(){
+		this.setPosition();
+		this.setBounds(x, y, width, height);
+	}
+	public void setButtonBounds(MenuButton[] list){
+		for(int i = 0; i < list.length; i++){
+			list[i].setPosition();
+			list[i].setYPosition(i);
+			list[i].setBounds(x, y-y_difference*i, width, height);
 		}
 	}
 }
