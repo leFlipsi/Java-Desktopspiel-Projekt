@@ -9,11 +9,6 @@ public class MenuButton extends JButton {
 	private int x, y, width, height, lr, y_difference;
 	private Window window;
 	
-	public MenuButton(String text, int y_difference, int button_width, int button_height, Window window){
-		this.lr = -1;
-		this.setStandards(text, button_width, button_height, window, y_difference);
-		this.setButtonBounds();
-	}
 	public MenuButton(String text, int y_difference, int lr, int button_width, int button_height, Window window){
 		this.lr = lr;
 		this.setStandards(text, button_width, button_height, window, y_difference);
@@ -34,14 +29,16 @@ public class MenuButton extends JButton {
 		window.add(this);
 	}
 	public void setPosition(){
+		this.y = (window.getHeight()/2)-(height/2)+y_difference;
 		if(lr == -1){
 			this.x = (window.getWidth()/2)-(width/2);
 		}else if(lr == 0){
-			this.x = (window.getWidth()/2)-(width/2)-width/2;
+			this.x = (window.getWidth()/2)-width;
 		}else if(lr == 1){
-			this.x = (window.getWidth()/2)-(width/2)+width/2;
+			this.x = (window.getWidth()/2);
+		}else if(lr == 2){
+			this.x = (window.getWidth()/2)+width/2;
 		}
-		this.y = (window.getHeight()/2)-(height/2)+y_difference;
 	}
 	public void setYPosition(int i){
 		this.y = y-y_difference*i;

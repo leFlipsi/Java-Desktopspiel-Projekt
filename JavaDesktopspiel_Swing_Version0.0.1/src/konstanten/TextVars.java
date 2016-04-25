@@ -12,4 +12,5 @@ public interface TextVars {
 	public String[] option_button_text = {"Fenstergröße:", "Anwenden", "Zurück"};
 	public String[] create_button_text = {"Abbrechen", "Erstellen"};
 	public String[] create_fields_text = {"Charaktername", "Spielstandname"};
+	public String[] load_button_text = {"Laden" , "Löschen"};
 }

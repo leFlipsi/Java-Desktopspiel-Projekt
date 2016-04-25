@@ -22,7 +22,7 @@ public class MenuSelection implements TextVars, ActionListener{
 		this.button_height = button_height;
 		list = new MenuButton[text.length];
 		for(int i = 0; i < text.length; i++){
-			list[i] = new MenuButton(text[i], y_difference+(3+i)+((i+1)*button_height), button_width, button_height, window);
+			list[i] = new MenuButton(text[i], y_difference+(3+i)+((i+1)*button_height), -1, button_width, button_height, window);
 			list[i].addActionListener(this);
 		}
 		hideList();
