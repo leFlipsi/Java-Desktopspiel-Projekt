@@ -1,3 +1,0 @@
-1|Charaktername|Spielstandname|
-2|Charaktername|Spielstandname|
-3|leFlipsi|Spielstandname|

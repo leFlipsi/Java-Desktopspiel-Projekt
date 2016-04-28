@@ -50,8 +50,13 @@ public class MenuButton extends JButton {
 	public void setButtonBounds(MenuButton[] list){
 		for(int i = 0; i < list.length; i++){
 			list[i].setPosition();
-			list[i].setYPosition(i);
-			list[i].setBounds(x, y-y_difference*i, width, height);
+			if(list[i].lr != 0 && list[i].lr != 1){
+				list[i].setYPosition(i);
+				list[i].setBounds(list[i].x, y-y_difference*i, list[i].width, list[i].height);
+			}else{
+				list[i].setBounds(list[i].x, list[i].y, list[i].width, list[i].height);
+			}
+			
 		}
 	}
 }
