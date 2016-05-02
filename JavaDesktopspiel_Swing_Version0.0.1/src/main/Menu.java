@@ -18,7 +18,7 @@ import textfields.MenuTextfield;
 
 public class Menu implements ActionListener{	
 	private Window window;
-	private int button_width, button_height, button_difference, field_difference, player_x, player_y, player_rot;;
+	private int button_width, button_height, button_difference, field_difference;
 	private MenuButton load_cancel;
 	private MenuButton[] start_buttons, option_buttons, create_buttons, load_buttons;
 	private MenuTextfield[] create_fields;
@@ -45,7 +45,7 @@ public class Menu implements ActionListener{
 		this.file = new File("./src/files/save.txt");
 		this.savetxt = new ArrayList<String>();
 		
-		initButtons();
+		
 		
 		this.button_width = 192;
 		this.button_height = 32;
@@ -53,7 +53,7 @@ public class Menu implements ActionListener{
 		this.field_difference = -128;
 		
 		this.game = new GameControl();
-	
+		initButtons();
 		setMenu(type);
 	}
 	
@@ -105,7 +105,6 @@ public class Menu implements ActionListener{
 		}else if(type == "ingame"){
 			
 		}
-		
 		window.getContentPane().repaint();
 	}
 	
@@ -169,18 +168,19 @@ public class Menu implements ActionListener{
             for(int i = 0; i < savetxt.size(); i++){
             	if(i != delete_id){
             		if(i > delete_id && delete_id >= 0){
-            			savetxt.set(i, i + "|" + charaktername[i] + "|" + spielstandname[i] + "|");
+            			savetxt.set(i, i + "|" + charaktername[i] + "|" + spielstandname[i] + "|" + 
+            					itemstatus[i] + "|" + xposition[i] + "|" + yposition[i] + "|" + rotation[i] + "|");
             		}
-	                bw.write(savetxt.get(i));
+            		bw.write(savetxt.get(i));
 	                bw.newLine();
             	}
             }
             if(delete_id < 0){
-            	bw.append((savetxt.size()+1) + "|" + char_name + "|" + game_name + "|");
+            	bw.append((savetxt.size()+1) + "|" + char_name + "|" + game_name + "|" + "" + "|" + 0 + "|" + 0 + "|" + 0 + "|");
             }
             bw.flush();
             bw.close();
-            game.setActive(""+savetxt.size()+1, char_name, game_name, "", 0, 0, 0);
+            //game.setActive(""+savetxt.size()+1, char_name, game_name, "", 0, 0, 0);
         } catch (Exception e) {
             e.printStackTrace();
 		}
@@ -246,6 +246,7 @@ public class Menu implements ActionListener{
 	public void loadToArraylist(){
 		try{
 			br = new BufferedReader(new FileReader(file));
+			savetxt.clear();
             while ((readerString = br.readLine()) != null) {
             	savetxt.add(readerString);
 			}
@@ -256,22 +257,24 @@ public class Menu implements ActionListener{
 	}
 	
 	public void loadGame(int i){
-		game.setActive(id[i], charaktername[i], spielstandname[i], itemstatus[i], xposition[i], yposition[i], rotation[i]);
+		//TODO game.setActive(id[i], charaktername[i], spielstandname[i], itemstatus[i], xposition[i], yposition[i], rotation[i]);
 	}
 	public void deleteGame(int i){
 		saveGame("", "", i);
 	}
 	
-	// EVENT LISTENERS
+	/*__________________________________________ EVENT LISTENERS ____________________________________________________________*/
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		/*____________________Startmenü____________________*/
 		if(e.getSource() == this.start_buttons[0]){				//Spielstand ERSTELLEN
 			setMenu("create_game");
         }else if(e.getSource() == this.start_buttons[1]){		//Spielstand LADEN
+        	loadToArraylist();
         	if(id[0] != null){
         		setMenu("load_game");
         	}else{
+        		setMenu("start");
         		start_buttons[1].setEnabled(false);
         	}
         }else if(e.getSource() == this.start_buttons[2]){		//Optionen
@@ -313,10 +316,10 @@ public class Menu implements ActionListener{
 			setMenu("start");
         }else if(e.getSource() == this.create_buttons[1]){		//Erstellen
         	create_buttons[1].setEnabled(false);
-    		loadToArraylist();
+        	loadToArraylist();
     		if(savetxt.size() <= 2){
+    			
     			saveGame(create_fields[0].getText(), create_fields[1].getText(), -1);
-    			loadToArraylist();
     			loadGame(savetxt.size());
     			setMenu("ingame");
     		}else{
