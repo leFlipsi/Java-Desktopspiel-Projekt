@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import buttons.MenuButton;
 import buttons.MenuSelection;
 import game.GameControl;
-import image.LoadImage;
+import image.LoadBackground;
 import konstanten.TextVars;
 import textfields.MenuShowtext;
 import textfields.MenuTextfield;
@@ -33,6 +33,7 @@ public class Menu implements ActionListener{
 	private MenuShowtext[] load_showtext;
 	private GameControl game;
 	private BufferedReader br;
+	private LoadBackground menu_bg;
 	
 	public Menu(Window window, String type) {
 		this.window = window;
@@ -58,6 +59,8 @@ public class Menu implements ActionListener{
 		
 		if(savetxt.size() < 1)
 			start_buttons[1].setEnabled(false);
+		
+		menu_bg = new LoadBackground(window, TextVars.menu_bg);
 	}
 	
 	public void initButtons(){

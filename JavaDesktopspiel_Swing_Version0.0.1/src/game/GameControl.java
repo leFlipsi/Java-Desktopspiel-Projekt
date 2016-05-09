@@ -1,6 +1,7 @@
 package game;
 
 import java.awt.Canvas;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
@@ -71,10 +72,12 @@ public class GameControl extends Canvas implements Runnable {
 		}
 		Graphics g = bs.getDrawGraphics();
 		//Graphic changes
-		g.fillRect(0, 0, window.getWidth(), window.getHeight());
+		g.setColor(Color.BLUE);
+		g.fillRect(0, 0, 200, 200);
 		//
 		g.dispose();
 		bs.show();
+		System.out.println("Running...");
 	}
 
 	private void update() {
