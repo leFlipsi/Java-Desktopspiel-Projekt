@@ -8,9 +8,9 @@ public class Window extends JFrame{
 	private int window_height = 576;
 	
 	public Window(String title){
+		this.setResizable(false);
 		this.setTitle(title);
 		this.updateWindowSize();
-		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLayout(null);
 		this.setVisible(true);
