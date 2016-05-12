@@ -6,27 +6,33 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 
+import javax.swing.JPanel;
+
+import image.LoadImage;
 import main.Window;
 
 public class GameControl extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
 	private boolean active;
 	private String id, charaktername, spielstandname, item_status;
-	private int player_pos_x, player_pos_y, player_rotation;
+	private int player_pos_x, player_pos_y, player_rotation, width;
 	private Window window;
+	private LoadImage charakter;
+	private JPanel panel;
 
 	private Thread game;
-	private Dimension size;
 
 	public GameControl(Window window) {
+		Dimension dim = new Dimension(window.getWidth(), window.getHeight());
+		this.setPreferredSize(dim);
 		this.active = false;
 		this.window = window;
-		canvasPreferredSize();
-	}
-
-	public void canvasPreferredSize() {
-		size = new Dimension(window.getWidth(), window.getHeight());
-		setPreferredSize(size);
+		this.width = 64;
+		this.panel = new JPanel();
+		charakter = new LoadImage(window.getWidth() / 2 - width / 2, window.getHeight() / 2 - width / 2, width,
+				0, 0, width/4, "charakter.png", panel);
+		panel.setVisible(false);
+		window.add(panel);
 	}
 
 	public void setActive(String id, String charaktername, String spielstandname, String item_status, int player_x,
@@ -38,6 +44,7 @@ public class GameControl extends Canvas implements Runnable {
 		this.player_pos_x = player_x;
 		this.player_pos_y = player_y;
 		this.player_rotation = player_rotation;
+		this.panel.setVisible(true);
 
 	}
 
@@ -66,12 +73,12 @@ public class GameControl extends Canvas implements Runnable {
 
 	private void render() {
 		BufferStrategy bs = getBufferStrategy();
-		if(bs == null){
+		if (bs == null) {
 			createBufferStrategy(3);
 			return;
 		}
 		Graphics g = bs.getDrawGraphics();
-		//Graphic changes
+		// Graphic changes
 		g.setColor(Color.BLUE);
 		g.fillRect(0, 0, 200, 200);
 		//

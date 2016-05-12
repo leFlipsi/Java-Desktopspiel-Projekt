@@ -14,8 +14,10 @@ public class LoadImage extends JPanel {
 	private BufferedImage img;
 	private int show_x, show_y, show_width, load_x, load_y, load_width;
 	private String resource;
+	private BufferedImage img2;
+	private JPanel panel;
 
-	public LoadImage(int sx, int sy, int sw, int lx, int ly, int lw, String res, Window window) {
+	public LoadImage(int sx, int sy, int sw, int lx, int ly, int lw, String res, JPanel panel) {
 		this.show_x = sx;
 		this.show_y = sy;
 		this.show_width = sw;
@@ -23,6 +25,7 @@ public class LoadImage extends JPanel {
 		this.load_y = ly;
 		this.load_width = lw;
 		this.resource = res;
+		this.panel = panel;
 		
 		this.setLayout(null);
 		this.setLocation(this.show_x, this.show_y);
@@ -34,13 +37,18 @@ public class LoadImage extends JPanel {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		window.add(this);
+		this.setVisible(true);
+	    panel.add(this);
 	}
 
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		BufferedImage img2 = img.getSubimage(this.load_x, this.load_y, this.load_width, this.load_width);
-		g.drawImage(img2, 0, 0, this.show_width, this.show_width, this);
+		img2 = img.getSubimage(this.load_x, this.load_y, this.load_width, this.load_width);
+		g.drawImage(img2, 0, 0, panel.getWidth()/16, panel.getHeight()/9, this);
+	}
+	
+	public void resetScaling(){
+		
 	}
 }
