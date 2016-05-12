@@ -265,7 +265,7 @@ public class Menu implements ActionListener{
 	
 	public void loadGame(int i){
 		explodeArraylistItems();
-		game.setActive(id[i], charaktername[i], spielstandname[i], itemstatus[i], xposition[i], yposition[i], rotation[i]);
+		game.setActive(id[i], charaktername[i], spielstandname[i], itemstatus[i], xposition[i], yposition[i], rotation[i], menu_bg);
 		setMenu("ingame");
 	}
 	public void deleteGame(int i){

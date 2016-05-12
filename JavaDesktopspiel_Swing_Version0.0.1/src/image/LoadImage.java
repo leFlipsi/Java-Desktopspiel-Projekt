@@ -1,13 +1,13 @@
 package image;
 
 import java.awt.Graphics;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.awt.image.RasterFormatException;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
-
-import main.Window;
 
 public class LoadImage extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -16,8 +16,9 @@ public class LoadImage extends JPanel {
 	private String resource;
 	private BufferedImage img2;
 	private JPanel panel;
+	private boolean is_charakter;
 
-	public LoadImage(int sx, int sy, int sw, int lx, int ly, int lw, String res, JPanel panel) {
+	public LoadImage(int sx, int sy, int sw, int lx, int ly, int lw, String res, JPanel panel, boolean is_charakter) {
 		this.show_x = sx;
 		this.show_y = sy;
 		this.show_width = sw;
@@ -26,29 +27,44 @@ public class LoadImage extends JPanel {
 		this.load_width = lw;
 		this.resource = res;
 		this.panel = panel;
-		
-		this.setLayout(null);
-		this.setLocation(this.show_x, this.show_y);
-		this.setSize(this.show_width, this.show_width);
-		this.setOpaque(true);
-
+		this.is_charakter = is_charakter;
 		try {
 			img = ImageIO.read(LoadImage.class.getResourceAsStream(this.resource));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		this.setOpaque(false);
+		panelSettings();
+	}
+
+	public void panelSettings() {
+		this.setLayout(null);
+		this.setLocation(this.show_x, this.show_y);
+		this.setSize(this.show_width, this.show_width);
 		this.setVisible(true);
-	    panel.add(this);
+		try {
+			panel.add(this);
+		} catch (Exception e) {
+
+		}
 	}
 
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		img2 = img.getSubimage(this.load_x, this.load_y, this.load_width, this.load_width);
-		g.drawImage(img2, 0, 0, panel.getWidth()/16, panel.getHeight()/9, this);
+		try{
+			img2 = img.getSubimage(this.load_x, this.load_y, this.load_width, this.load_width);
+			if (is_charakter) {
+				g.drawImage(img2, 0, 0, panel.getWidth(), panel.getHeight(), this);
+			} else {
+				g.drawImage(img2, 0, 0, panel.getWidth() / 16, panel.getHeight() / 9, this);
+			}
+		}catch(RasterFormatException rfe){
+			
+		}
 	}
-	
-	public void resetScaling(){
-		
+
+	public void resetScaling() {
+
 	}
 }
