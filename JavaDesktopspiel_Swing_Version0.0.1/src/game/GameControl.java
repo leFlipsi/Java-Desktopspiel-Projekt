@@ -114,6 +114,12 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 	}
 
 	private void render() {
+		locx = bg.getLocation().x;
+		locy = bg.getLocation().y;
+		nextStepBackground();
+		walkingXCheckY();
+		walkingYCheckX();
+		freeWay();
 		if (way_h_free && way_v_free) {
 			if (walking[2] - walking[3] != 0 && walking[0] - walking[1] != 0 && (bg.getLocation().x - 32) % 64 == 0
 					&& (bg.getLocation().y % 64) == 0) {
@@ -268,24 +274,31 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
 			running = 1;
 		}
+		if (e.getKeyCode() == KeyEvent.VK_E) {
+			
+		}
 	}
 
 	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_W) {
 			walking[0] = 0;
 			lastActive[0] = 1;
+			this.player_rotation = 0;
 		}
 		if (e.getKeyCode() == KeyEvent.VK_S) {
 			walking[1] = 0;
 			lastActive[0] = -1;
+			this.player_rotation = 2;
 		}
 		if (e.getKeyCode() == KeyEvent.VK_A) {
 			walking[2] = 0;
 			lastActive[1] = 1;
+			this.player_rotation = 3;
 		}
 		if (e.getKeyCode() == KeyEvent.VK_D) {
 			walking[3] = 0;
 			lastActive[1] = -1;
+			this.player_rotation = 1;
 		}
 		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
 			running = 1;
