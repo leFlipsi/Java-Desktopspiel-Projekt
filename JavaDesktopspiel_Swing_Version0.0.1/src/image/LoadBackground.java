@@ -10,11 +10,13 @@ public class LoadBackground extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private ArrayList<LoadImage> images;
 	private int x_length, y_length, width;
+	private double[][] data;
 
 	public LoadBackground(Window window, double[][] data) {
 		this.x_length = data[0].length;
 		this.y_length = data.length;
 		this.width = 64;
+		this.data = data;
 		this.setLayout(null);
 		for (int i = 0; i < data.length; i++) {
 			for (int j = 0; j < data[0].length; j++) {
@@ -55,5 +57,9 @@ public class LoadBackground extends JPanel {
 	
 	public int getScale(){
 		return width;
+	}
+	
+	public double getData(int y, int x){
+		return data[y][x];
 	}
 }
