@@ -11,7 +11,7 @@ import main.Window;
 
 public class GameControl extends Canvas implements Runnable, KeyListener {
 	private static final long serialVersionUID = 1L;
-	private boolean active, way_h_free, way_v_free;
+	private boolean active, way_h_free, way_v_free, e_pressed;
 	private String id, charaktername, spielstandname, item_status;
 	private int player_pos_x, player_pos_y, player_rotation, width, running, bg_border_x, bg_border_y, locx, locy;
 	private double bg_unwalkable, xplus1, xminus1, yplus1, yminus1;
@@ -120,21 +120,21 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 		walkingXCheckY();
 		walkingYCheckX();
 		freeWay();
-		if (way_h_free && way_v_free) {
-			if (walking[2] - walking[3] != 0 && walking[0] - walking[1] != 0 && (bg.getLocation().x - 32) % 64 == 0
-					&& (bg.getLocation().y % 64) == 0) {
+		if (!e_pressed) {
+			if (way_h_free && way_v_free) {
+				if (walking[2] - walking[3] != 0 && walking[0] - walking[1] != 0 && (bg.getLocation().x - 32) % 64 == 0
+						&& (bg.getLocation().y % 64) == 0) {
+					bg.resetPosition(running * (walking[2] - walking[3]), 0);
+				} else {
+					bg.resetPosition(running * (walking[2] - walking[3]), running * (walking[0] - walking[1]));
+				}
+			} else if (way_v_free) {
+				bg.resetPosition(0, running * (walking[0] - walking[1]));
+			} else if (way_h_free) {
 				bg.resetPosition(running * (walking[2] - walking[3]), 0);
-			} else {
-				bg.resetPosition(running * (walking[2] - walking[3]), running * (walking[0] - walking[1]));
 			}
-			finishStep();
-		} else if (way_v_free) {
-			bg.resetPosition(0, running * (walking[0] - walking[1]));
-			finishStep();
-		} else if (way_h_free) {
-			bg.resetPosition(running * (walking[2] - walking[3]), 0);
-			finishStep();
 		}
+		finishStep();
 	}
 
 	private void update() {
@@ -254,6 +254,26 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 		}
 	}
 
+	public void pickUpItem() {
+		if (this.player_rotation == 0 && yplus1 == 10.0) { // Double für
+															// Textureinheit mit
+															// Item
+
+		} else if (this.player_rotation == 1 && xplus1 == 10.0) { // Double für
+																	// Textureinheit
+																	// mit Item
+
+		} else if (this.player_rotation == 2 && yminus1 == 10.0) { // Double für
+																	// Textureinheit
+																	// mit Item
+
+		} else if (this.player_rotation == 3 && xminus1 == 10.0) { // Double für
+																	// Textureinheit
+																	// mit Item
+
+		}
+	}
+
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_W) {
 			walking[0] = 1;
@@ -275,7 +295,8 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 			running = 1;
 		}
 		if (e.getKeyCode() == KeyEvent.VK_E) {
-			
+			e_pressed = true;
+			pickUpItem();
 		}
 	}
 
@@ -302,6 +323,9 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 		}
 		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
 			running = 1;
+		}
+		if (e.getKeyCode() == KeyEvent.VK_E) {
+			e_pressed = false;
 		}
 	}
 
