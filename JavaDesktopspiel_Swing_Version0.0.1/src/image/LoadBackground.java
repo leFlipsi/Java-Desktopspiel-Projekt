@@ -19,10 +19,10 @@ public class LoadBackground extends JPanel {
 		this.data = data;
 		this.setLayout(null);
 		for (int i = 0; i < data.length; i++) {
-			for (int j = 0; j < data[0].length; j++) {
+			for (int j = 0; j < data[i].length; j++) {
 				try {
-					images.add(new LoadImage(j * window.getWidth() / 16, i * window.getHeight() / 9, 64,
-							(int) (data[i][j] % 2) * 33, (int) Math.floor(data[i][j] / 2) * 33, 31, "test_sprite.jpg",
+					images.add(new LoadImage(j * 64, i * 64, 64,
+							(int) data[i][j] % 8 * 16, (int) Math.floor(data[i][j] / 8) * 16, 16, "sprite.png",
 							this, false));
 				} catch (Exception e) {
 

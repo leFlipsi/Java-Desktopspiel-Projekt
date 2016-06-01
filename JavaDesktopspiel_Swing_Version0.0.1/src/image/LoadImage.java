@@ -52,12 +52,13 @@ public class LoadImage extends JPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		try{
-			img2 = img.getSubimage(this.load_x, this.load_y, this.load_width, this.load_width);
+		try{	
 			if (is_charakter) {
+				img2 = img.getSubimage(this.load_x, this.load_y, this.load_width, this.load_width);
 				g.drawImage(img2, 0, 0, panel.getWidth(), panel.getHeight(), this);
 			} else {
-				g.drawImage(img2, 0, 0, panel.getWidth() / 16, panel.getHeight() / 9, this);
+				img2 = img.getSubimage(this.load_x, this.load_y, this.load_width, this.load_width);
+				g.drawImage(img2, 0, 0, this.show_width, this.show_width, this);
 			}
 		}catch(RasterFormatException rfe){
 			

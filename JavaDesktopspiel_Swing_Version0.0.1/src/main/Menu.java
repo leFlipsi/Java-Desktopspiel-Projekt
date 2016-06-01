@@ -36,6 +36,9 @@ public class Menu implements ActionListener{
 	private LoadBackground menu_bg;
 	
 	public Menu(Window window, String type) {
+		System.out.println(TextVars.tex_data_1.length + " " + TextVars.tex_data_2.length + " " + TextVars.tex_data_3.length + " " + TextVars.tex_data_4_0.length + " " + TextVars.tex_data_4_1.length + " " +
+				TextVars.tex_data_5.length + " " + TextVars.tex_data_6_0.length + " " + TextVars.tex_data_7.length + " " + TextVars.tex_data_8.length + " " + 
+				TextVars.tex_data_9.length + " " + TextVars.tex_data_10.length + " " + TextVars.tex_data_11.length);
 		this.window = window;
 		this.start_buttons = new MenuButton[3];
 		this.option_buttons = new MenuButton[3];

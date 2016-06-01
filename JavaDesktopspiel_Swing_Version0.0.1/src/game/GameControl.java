@@ -37,7 +37,7 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 		this.window = window;
 		this.bg_border_x = 8;
 		this.bg_border_y = 4;
-		this.bg_unwalkable = 3.0;
+		this.bg_unwalkable = 32.0;
 		this.width = 64;
 		charakter = new Charakter[4];
 		charakter[0] = new Charakter(window, 0, 0);
@@ -292,7 +292,7 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 			lastActive[1] = 0;
 		}
 		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
-			running = 1;
+			running = 3;
 		}
 		if (e.getKeyCode() == KeyEvent.VK_E) {
 			e_pressed = true;
