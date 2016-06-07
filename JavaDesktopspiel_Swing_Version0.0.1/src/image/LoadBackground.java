@@ -8,13 +8,17 @@ import main.Window;
 
 public class LoadBackground extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private ArrayList<LoadImage> images;
-	private int x_length, y_length, width, load;
+	private ArrayList<LoadImage> images, images_backup;
 	private ArrayList<Integer> item_i, item_j;
+	private int x_length, y_length, width, load;
+	private double data_zs;
 	private double[][] data;
-	private LoadImage stein_item;
 
 	public LoadBackground(Window window, double[][] data) {
+		this.images = new ArrayList<LoadImage>();
+		this.images_backup = new ArrayList<LoadImage>();
+		this.item_i = new ArrayList<Integer>();
+		this.item_j = new ArrayList<Integer>();
 		this.x_length = data[0].length;
 		this.y_length = data.length;
 		this.width = 64;
@@ -23,19 +27,19 @@ public class LoadBackground extends JPanel {
 		this.setLayout(null);
 		for (int i = 0; i < data.length; i++) {
 			for (int j = 0; j < data[i].length; j++) {
-				try {
-					if (Math.floor((data[i][j] - Math.floor(data[i][j])) * 10) / 10 == 0.0) {
-						images.add(new LoadImage(j * width, i * width, width, (int) data[i][j] % 8 * load,
-								(int) Math.floor(data[i][j] / 8) * load, load, "sprite.png", this, false));
-					} else if (Math.floor((data[i][j] - Math.floor(data[i][j])) * 10) / 10 == 0.1) {
-						images.add(new LoadImage(j * width, i * width, width, 4 * load, 6 * load, load, "sprite.png",
-								this, false));
-						item_i.add(i);
-						item_j.add(j);
-					}
-				} catch (Exception e) {
-
+				if (Math.floor((data[i][j] - Math.floor(data[i][j])) * 10) / 10 == 0.0) {
+					images.add(new LoadImage(j * width, i * width, width, (int) data[i][j] % 8 * load,
+							(int) Math.floor(data[i][j] / 8) * load, load, "sprite.png", this, false));
+				} else if (Math.floor((data[i][j] - Math.floor(data[i][j])) * 10) / 10 == 0.1) {
+					images_backup.add(new LoadImage(j * width, i * width, width, (int) data[i][j] % 8 * load,
+							(int) Math.floor(data[i][j] / 8) * load, load, "sprite.png", this, false));
+					images_backup.get(images_backup.size() - 1).setVisible(false);
+					images.add(new LoadImage(j * width, i * width, width, 4 * load, 6 * load, load, "sprite.png", this,
+							false));
+					item_i.add(i);
+					item_j.add(j);
 				}
+
 			}
 		}
 		this.setSize(this.x_length * this.width, this.y_length * this.width);
@@ -83,5 +87,9 @@ public class LoadBackground extends JPanel {
 		} catch (Exception e) {
 
 		}
+	}
+	
+	public void setBackupTexture(int b){
+		images_backup.get(b).setVisible(true);
 	}
 }

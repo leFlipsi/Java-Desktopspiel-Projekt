@@ -4,6 +4,7 @@ import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 
 import image.LoadBackground;
 import image.LoadImage;
@@ -18,12 +19,18 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 	private double bg_unwalkable, xplus1, xminus1, yplus1, yminus1;
 	private Window window;
 	private Charakter[] charakter;
+	private Inventar inventar;
+	private ArrayList<Item> inv_items;
 	private LoadBackground bg;
 	private int[] walking, lastActive;
 	private Thread game;
 
 	public GameControl(Window window) {
 		Dimension dim = new Dimension(window.getWidth(), window.getHeight());
+
+		inv_items = new ArrayList<Item>();
+		inv_items.add(new Item(window, 16));
+		inv_items.get(0).setVisible(false);
 		this.walking = new int[4];
 		this.walking[0] = 0;
 		this.walking[1] = 0;
@@ -49,6 +56,8 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 		charakter[2].setVisible(false);
 		charakter[3] = new Charakter(window, 48, 0);
 		charakter[3].setVisible(false);
+		inventar = new Inventar(window);
+		inventar.setVisible(false);
 	}
 
 	public void setActive(String id, String charaktername, String spielstandname, String item_status, int player_x,
@@ -62,9 +71,10 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 		this.player_pos_y = player_y;
 		this.player_rotation = player_rotation;
 		this.charakter[0].setVisible(true);
+		this.inventar.setVisible(true);
 		this.addKeyListener(this);
 		this.setFocusable(true);
-		bg.resetPosition(-32, 0);
+		bg.resetPosition(-1800, 0);
 		window.setTitle(TextVars.window_title + " | Charakter: " + charaktername + " | Spielstand: " + spielstandname);
 	}
 
@@ -256,24 +266,19 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 	}
 
 	public void pickUpItem() {
-		if (this.player_rotation == 0 && yplus1 == 10.0) { // Double für
-															// Textureinheit mit
-															// Item
-
-		} else if (this.player_rotation == 1 && xplus1 == 10.0) { // Double für
-																	// Textureinheit
-																	// mit Item
-
-		} else if (this.player_rotation == 2 && yminus1 == 10.0) { // Double für
-																	// Textureinheit
-																	// mit Item
-
-		} else if (this.player_rotation == 3 && xminus1 == 10.0) { // Double für
-																	// Textureinheit
-																	// mit Item
-
+		if (this.player_rotation == 0 && Math.floor((yminus1 - Math.floor(yminus1))*10)/10 == 0.1) {
+			bg.setBackupTexture(0);
+			inv_items.get(0).setVisible(true);
+		} else if (this.player_rotation == 1 && Math.floor((xplus1 - Math.floor(xplus1))*10)/10 == 0.1) {
+			bg.setBackupTexture(0);
+			inv_items.get(0).setVisible(true);
+		} else if (this.player_rotation == 2 && Math.floor((yplus1 - Math.floor(yplus1))*10)/10 == 0.1) {
+			bg.setBackupTexture(0);
+			inv_items.get(0).setVisible(true);
+		} else if (this.player_rotation == 3 && Math.floor((xminus1 - Math.floor(xminus1))*10)/10 == 0.1) { 
+			bg.setBackupTexture(0);
+			inv_items.get(0).setVisible(true);
 		}
-		bg.resetBackground(0);
 	}
 
 	public void keyPressed(KeyEvent e) {
