@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import image.LoadBackground;
+import image.LoadImage;
 import konstanten.TextVars;
 import main.Window;
 
@@ -272,6 +273,7 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 																	// mit Item
 
 		}
+		bg.resetBackground(0);
 	}
 
 	public void keyPressed(KeyEvent e) {
