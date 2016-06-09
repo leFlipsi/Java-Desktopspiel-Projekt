@@ -74,7 +74,7 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 		this.inventar.setVisible(true);
 		this.addKeyListener(this);
 		this.setFocusable(true);
-		bg.resetPosition(-1800, 0);
+		bg.resetPosition(-32, 0);
 		window.setTitle(TextVars.window_title + " | Charakter: " + charaktername + " | Spielstand: " + spielstandname);
 	}
 
@@ -299,7 +299,7 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 			lastActive[1] = 0;
 		}
 		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
-			running = 3;
+			running = 32;
 		}
 		if (e.getKeyCode() == KeyEvent.VK_E) {
 			e_pressed = true;

@@ -15,8 +15,8 @@ public class LoadBackground extends JPanel {
 	private double[][] data;
 
 	public LoadBackground(Window window, double[][] data) {
-		this.images = new ArrayList<LoadImage>();
 		this.images_backup = new ArrayList<LoadImage>();
+		this.images = new ArrayList<LoadImage>();
 		this.item_i = new ArrayList<Integer>();
 		this.item_j = new ArrayList<Integer>();
 		this.x_length = data[0].length;
@@ -35,6 +35,14 @@ public class LoadBackground extends JPanel {
 							(int) Math.floor(data[i][j] / 8) * load, load, "sprite.png", this, false));
 					images_backup.get(images_backup.size() - 1).setVisible(false);
 					images.add(new LoadImage(j * width, i * width, width, 4 * load, 6 * load, load, "sprite.png", this,
+							false));
+					item_i.add(i);
+					item_j.add(j);
+				}else if (Math.floor((data[i][j] - Math.floor(data[i][j])) * 10) / 10 == 0.2) {
+					images_backup.add(new LoadImage(j * width, i * width, width, (int) data[i][j] % 8 * load,
+							(int) Math.floor(data[i][j] / 8) * load, load, "sprite.png", this, false));
+					images_backup.get(images_backup.size() - 1).setVisible(false);
+					images.add(new LoadImage(j * width, i * width, width, 3 * load, 6 * load, load, "sprite.png", this,
 							false));
 					item_i.add(i);
 					item_j.add(j);
@@ -79,11 +87,7 @@ public class LoadBackground extends JPanel {
 	public void resetBackground(int count) {
 		try {
 			images.set(item_i.get(count) * item_j.get(count), null);
-			images.set(item_i.get(count) * item_j.get(count),
-					new LoadImage(item_j.get(count) * width, item_i.get(count) * width, width,
-							(int) data[item_i.get(count)][item_j.get(count)] % 8 * load,
-							(int) Math.floor(data[item_i.get(count)][item_j.get(count)] / 8) * load, load, "sprite.png",
-							this, false));
+			images.set(item_i.get(count) * item_j.get(count), images_backup.get(count));
 		} catch (Exception e) {
 
 		}
