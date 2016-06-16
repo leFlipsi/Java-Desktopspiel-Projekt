@@ -7,8 +7,8 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 import image.LoadBackground;
-import image.LoadImage;
 import konstanten.TextVars;
+import main.Menu;
 import main.Window;
 
 public class GameControl extends Canvas implements Runnable, KeyListener {
@@ -24,10 +24,11 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 	private LoadBackground bg;
 	private int[] walking, lastActive;
 	private Thread game;
+	private Menu menu;
 
-	public GameControl(Window window) {
+	public GameControl(Window window, Menu menu) {
+		this.menu = menu;
 		Dimension dim = new Dimension(window.getWidth(), window.getHeight());
-
 		inv_items = new ArrayList<Item>();
 		inv_items.add(new Item(window, 16));
 		inv_items.get(0).setVisible(false);
@@ -65,6 +66,7 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 	public void setActive(String id, String charaktername, String spielstandname, String item_status, int player_x,
 			int player_y, int player_rotation, LoadBackground bg) {
 		this.bg = bg;
+		bg.resetPosition(-32 - 256, -128);
 		this.id = id;
 		this.charaktername = charaktername;
 		this.spielstandname = spielstandname;
@@ -76,7 +78,6 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 		this.inventar.setVisible(true);
 		this.addKeyListener(this);
 		this.setFocusable(true);
-		bg.resetPosition(-32, 0);
 		window.setTitle(TextVars.window_title + " | Charakter: " + charaktername + " | Spielstand: " + spielstandname);
 	}
 
@@ -99,7 +100,7 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 	public void run() {
 		long lastTime = System.nanoTime();
 		long timer = System.currentTimeMillis();
-		final double ns = 1000000000.0 / 60.0;
+		final double ns = 1000000000.0 / 120.0;
 		double delta = 0;
 
 		int updates = 0;
@@ -268,33 +269,28 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 	}
 
 	public void pickUpItem() {
-		if (this.player_rotation == 0) {				//W -> von UNTEN
-			if(Math.floor((yminus1 - Math.floor(yminus1))*10)/10 == 0.1) {
+		if (this.player_rotation == 0) { // W -> von UNTEN
+			if (Math.floor((yminus1 - Math.floor(yminus1)) * 10) / 10 == 0.1) {
 				item_pickUpStone();
 			}
-			if(Math.floor((yminus1 - Math.floor(yminus1))*10)/10 == 0.2 && this.item_status == "stein") {
+			if (Math.floor((yminus1 - Math.floor(yminus1)) * 10) / 10 == 0.2 && this.item_status == "stein") {
 				item_openChest();
 			}
-		} else if (this.player_rotation == 1) {			//D -> von RECHTS
-			if(Math.floor((xplus1 - Math.floor(xplus1))*10)/10 == 0.1) {
+		} else if (this.player_rotation == 1) { // D -> von RECHTS
+			if (Math.floor((xplus1 - Math.floor(xplus1)) * 10) / 10 == 0.1) {
 				item_pickUpStone();
 			}
-			if(Math.floor((xplus1 - Math.floor(xplus1))*10)/10 == 0.2 && this.item_status == "stein") {
-				item_openChest();
+			if (Math.floor((xplus1 - Math.floor(xplus1)) * 10) / 10 == 0.5 && this.item_status == "key") {
+				System.out.println("OPEN");
+				item_openDoor();
 			}
-		} else if (this.player_rotation == 2) {			//S -> von OBEN
-			if(Math.floor((yplus1 - Math.floor(yplus1))*10)/10 == 0.1) {
+		} else if (this.player_rotation == 2) { // S -> von OBEN
+			if (Math.floor((yplus1 - Math.floor(yplus1)) * 10) / 10 == 0.1) {
 				item_pickUpStone();
 			}
-			if(Math.floor((yplus1 - Math.floor(yplus1))*10)/10 == 0.2 && this.item_status == "stein") {
-				item_openChest();
-			}
-		} else if (this.player_rotation == 3) { 		//A -> von LINKS
-			if(Math.floor((xminus1 - Math.floor(xminus1))*10)/10 == 0.1) {
+		} else if (this.player_rotation == 3) { // A -> von LINKS
+			if (Math.floor((xminus1 - Math.floor(xminus1)) * 10) / 10 == 0.1) {
 				item_pickUpStone();
-			}
-			if(Math.floor((xminus1 - Math.floor(xminus1))*10)/10 == 0.2 && this.item_status == "stein") {
-				item_openChest();
 			}
 		}
 	}
@@ -304,7 +300,7 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 		inv_items.get(0).setVisible(true);
 		this.item_status = "stein";
 	}
-	
+
 	public void item_openChest() {
 		bg.setBackupTexture(1);
 		inv_items.get(0).setVisible(false);
@@ -312,58 +308,76 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 		this.item_status = "key";
 	}
 
+	public void item_openDoor() {
+		bg.setBackupTexture(2);
+		bg.setBackupTexture(3);
+	}
+
 	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_W) {
-			walking[0] = 1;
-			lastActive[0] = 0;
+		if (active) {
+			if (e.getKeyCode() == KeyEvent.VK_W) {
+				walking[0] = 1;
+				lastActive[0] = 0;
+			}
+			if (e.getKeyCode() == KeyEvent.VK_S) {
+				walking[1] = 1;
+				lastActive[0] = 0;
+			}
+			if (e.getKeyCode() == KeyEvent.VK_A) {
+				walking[2] = 1;
+				lastActive[1] = 0;
+			}
+			if (e.getKeyCode() == KeyEvent.VK_D) {
+				walking[3] = 1;
+				lastActive[1] = 0;
+			}
+			if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
+				int ran_x = (int) (-32 - Math.random() * 2400);
+				int ran_y = (int) (-Math.random() * 2400);
+				bg.setPosition(ran_x, ran_y);
+			}
+			if (e.getKeyCode() == KeyEvent.VK_E) {
+				e_pressed = true;
+				pickUpItem();
+			}
 		}
-		if (e.getKeyCode() == KeyEvent.VK_S) {
-			walking[1] = 1;
-			lastActive[0] = 0;
-		}
-		if (e.getKeyCode() == KeyEvent.VK_A) {
-			walking[2] = 1;
-			lastActive[1] = 0;
-		}
-		if (e.getKeyCode() == KeyEvent.VK_D) {
-			walking[3] = 1;
-			lastActive[1] = 0;
-		}
-		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
-			running = 32;
-		}
-		if (e.getKeyCode() == KeyEvent.VK_E) {
-			e_pressed = true;
-			pickUpItem();
+		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			if (active) {
+				menu.setMenu("ingame_menu");
+			} else {
+				menu.setMenu("ingame");
+			}
 		}
 	}
 
 	public void keyReleased(KeyEvent e) {
-		if (e.getKeyCode() == KeyEvent.VK_W) {
-			walking[0] = 0;
-			lastActive[0] = 1;
-			this.player_rotation = 0;
-		}
-		if (e.getKeyCode() == KeyEvent.VK_S) {
-			walking[1] = 0;
-			lastActive[0] = -1;
-			this.player_rotation = 2;
-		}
-		if (e.getKeyCode() == KeyEvent.VK_A) {
-			walking[2] = 0;
-			lastActive[1] = 1;
-			this.player_rotation = 3;
-		}
-		if (e.getKeyCode() == KeyEvent.VK_D) {
-			walking[3] = 0;
-			lastActive[1] = -1;
-			this.player_rotation = 1;
-		}
-		if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
-			running = 1;
-		}
-		if (e.getKeyCode() == KeyEvent.VK_E) {
-			e_pressed = false;
+		if (active) {
+			if (e.getKeyCode() == KeyEvent.VK_W) {
+				walking[0] = 0;
+				lastActive[0] = 1;
+				this.player_rotation = 0;
+			}
+			if (e.getKeyCode() == KeyEvent.VK_S) {
+				walking[1] = 0;
+				lastActive[0] = -1;
+				this.player_rotation = 2;
+			}
+			if (e.getKeyCode() == KeyEvent.VK_A) {
+				walking[2] = 0;
+				lastActive[1] = 1;
+				this.player_rotation = 3;
+			}
+			if (e.getKeyCode() == KeyEvent.VK_D) {
+				walking[3] = 0;
+				lastActive[1] = -1;
+				this.player_rotation = 1;
+			}
+			if (e.getKeyCode() == KeyEvent.VK_SHIFT) {
+				running = 1;
+			}
+			if (e.getKeyCode() == KeyEvent.VK_E) {
+				e_pressed = false;
+			}
 		}
 	}
 

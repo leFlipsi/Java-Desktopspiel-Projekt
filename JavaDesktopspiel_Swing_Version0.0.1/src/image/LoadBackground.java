@@ -45,6 +45,14 @@ public class LoadBackground extends JPanel {
 							false));
 					item_i.add(i);
 					item_j.add(j);
+				}else if (Math.floor((data[i][j] - Math.floor(data[i][j])) * 10) / 10 == 0.5) {
+					images_backup.add(new LoadImage(j * width, i * width, width, (int) data[i][j] % 8 * load,
+							(int) Math.floor(data[i][j] / 8) * load, load, "sprite.png", this, false));
+					images_backup.get(images_backup.size() - 1).setVisible(false);
+					images.add(new LoadImage(j * width, i * width, width, 7 * load, 5 * load, load, "sprite.png", this,
+							false));
+					item_i.add(i);
+					item_j.add(j);
 				}
 
 			}
@@ -65,6 +73,10 @@ public class LoadBackground extends JPanel {
 
 	public void resetPosition(int x_dir, int y_dir) {
 		this.setLocation(this.getLocation().x + x_dir, this.getLocation().y + y_dir);
+	}
+	
+	public void setPosition(int x_dir, int y_dir) {
+		this.setLocation(x_dir, y_dir);
 	}
 
 	public int getXLength() {

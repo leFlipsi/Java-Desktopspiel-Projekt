@@ -21,7 +21,7 @@ public class Menu implements ActionListener{
 	private Window window;
 	private int button_width, button_height, button_difference, field_difference;
 	private MenuButton load_cancel;
-	private MenuButton[] start_buttons, option_buttons, create_buttons, load_buttons;
+	private MenuButton[] start_buttons, option_buttons, create_buttons, load_buttons, ingame_buttons;
 	private MenuTextfield[] create_fields;
 	private MenuSelection o_windowscaleList;
 	private String[] o_scales = {"800x450", "1024x576", "1920x1080"};
@@ -43,6 +43,7 @@ public class Menu implements ActionListener{
 		this.load_buttons = new MenuButton[6];
 		this.create_fields = new MenuTextfield[2];
 		this.load_showtext = new MenuShowtext[3];
+		this.ingame_buttons = new MenuButton[3];
 		
 		this.file = new File("./src/files/save.txt");
 		this.savetxt = new ArrayList<String>();
@@ -52,7 +53,7 @@ public class Menu implements ActionListener{
 		this.button_difference = 64;
 		this.field_difference = -128;
 		
-		this.game = new GameControl(window);
+		this.game = new GameControl(window, this);
 		window.add(game);						//TODO  -  Test
 		initButtons();
 		setMenu(type);
@@ -90,6 +91,10 @@ public class Menu implements ActionListener{
 			}catch(Exception e){
 			}
 		}
+		for(int i = 0; i < ingame_buttons.length; i++){
+			ingame_buttons[i] = new MenuButton(TextVars.ingame_button_text[i], (i*button_difference)-button_difference, -1, button_width, button_height, window);
+			ingame_buttons[i].addActionListener(this);
+		}
 		this.load_cancel = new MenuButton(TextVars.create_button_text[0], 3*button_difference-button_height/2, -1, button_width*3, button_height, window);
 		this.load_cancel.addActionListener(this);
 		o_windowscaleList = new MenuSelection(o_scales, -button_difference, button_width, button_height, window, this);
@@ -111,6 +116,10 @@ public class Menu implements ActionListener{
 			load_cancel.setVisible(true);
 		}else if(type == "ingame"){
 			game.start();
+		}else if(type == "ingame_menu"){
+			showButtons(ingame_buttons, 0);
+			ingame_buttons[1].setVisible(false);
+			game.stop();
 		}
 		window.getContentPane().repaint();
 	}
@@ -160,6 +169,7 @@ public class Menu implements ActionListener{
 		}
 	}
 	public void hideAll(){
+		hideButtons(ingame_buttons, 0);
 		hideButtons(option_buttons, 0);
 		hideButtons(start_buttons, 0);
 		hideButtons(create_buttons, 0);
@@ -354,6 +364,14 @@ public class Menu implements ActionListener{
 		}
 		if(e.getSource() == this.load_cancel){
 			setMenu("start");
+		}
+		
+		/*____________________Ingamemenü____________________*/
+		if(e.getSource() == this.ingame_buttons[0]){
+			setMenu("ingame");
+		}
+		if(e.getSource() == this.ingame_buttons[2]){
+			System.exit(0);
 		}
 	}
 }
