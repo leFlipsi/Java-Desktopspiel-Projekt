@@ -11,7 +11,6 @@ public class LoadBackground extends JPanel {
 	private ArrayList<LoadImage> images, images_backup;
 	private ArrayList<Integer> item_i, item_j;
 	private int x_length, y_length, width, load;
-	private double data_zs;
 	private double[][] data;
 
 	public LoadBackground(Window window, double[][] data) {
@@ -85,12 +84,8 @@ public class LoadBackground extends JPanel {
 	}
 
 	public void resetBackground(int count) {
-		try {
-			images.set(item_i.get(count) * item_j.get(count), null);
-			images.set(item_i.get(count) * item_j.get(count), images_backup.get(count));
-		} catch (Exception e) {
-
-		}
+		images.set(item_i.get(count) * item_j.get(count), null);
+		images.set(item_i.get(count) * item_j.get(count), images_backup.get(count));
 	}
 	
 	public void setBackupTexture(int b){

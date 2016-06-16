@@ -31,6 +31,8 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 		inv_items = new ArrayList<Item>();
 		inv_items.add(new Item(window, 16));
 		inv_items.get(0).setVisible(false);
+		inv_items.add(new Item(window, 32));
+		inv_items.get(1).setVisible(false);
 		this.walking = new int[4];
 		this.walking[0] = 0;
 		this.walking[1] = 0;
@@ -266,19 +268,48 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 	}
 
 	public void pickUpItem() {
-		if (this.player_rotation == 0 && Math.floor((yminus1 - Math.floor(yminus1))*10)/10 == 0.1) {
-			bg.setBackupTexture(0);
-			inv_items.get(0).setVisible(true);
-		} else if (this.player_rotation == 1 && Math.floor((xplus1 - Math.floor(xplus1))*10)/10 == 0.1) {
-			bg.setBackupTexture(0);
-			inv_items.get(0).setVisible(true);
-		} else if (this.player_rotation == 2 && Math.floor((yplus1 - Math.floor(yplus1))*10)/10 == 0.1) {
-			bg.setBackupTexture(0);
-			inv_items.get(0).setVisible(true);
-		} else if (this.player_rotation == 3 && Math.floor((xminus1 - Math.floor(xminus1))*10)/10 == 0.1) { 
-			bg.setBackupTexture(0);
-			inv_items.get(0).setVisible(true);
+		if (this.player_rotation == 0) {				//W -> von UNTEN
+			if(Math.floor((yminus1 - Math.floor(yminus1))*10)/10 == 0.1) {
+				item_pickUpStone();
+			}
+			if(Math.floor((yminus1 - Math.floor(yminus1))*10)/10 == 0.2 && this.item_status == "stein") {
+				item_openChest();
+			}
+		} else if (this.player_rotation == 1) {			//D -> von RECHTS
+			if(Math.floor((xplus1 - Math.floor(xplus1))*10)/10 == 0.1) {
+				item_pickUpStone();
+			}
+			if(Math.floor((xplus1 - Math.floor(xplus1))*10)/10 == 0.2 && this.item_status == "stein") {
+				item_openChest();
+			}
+		} else if (this.player_rotation == 2) {			//S -> von OBEN
+			if(Math.floor((yplus1 - Math.floor(yplus1))*10)/10 == 0.1) {
+				item_pickUpStone();
+			}
+			if(Math.floor((yplus1 - Math.floor(yplus1))*10)/10 == 0.2 && this.item_status == "stein") {
+				item_openChest();
+			}
+		} else if (this.player_rotation == 3) { 		//A -> von LINKS
+			if(Math.floor((xminus1 - Math.floor(xminus1))*10)/10 == 0.1) {
+				item_pickUpStone();
+			}
+			if(Math.floor((xminus1 - Math.floor(xminus1))*10)/10 == 0.2 && this.item_status == "stein") {
+				item_openChest();
+			}
 		}
+	}
+
+	public void item_pickUpStone() {
+		bg.setBackupTexture(0);
+		inv_items.get(0).setVisible(true);
+		this.item_status = "stein";
+	}
+	
+	public void item_openChest() {
+		bg.setBackupTexture(1);
+		inv_items.get(0).setVisible(false);
+		inv_items.get(1).setVisible(true);
+		this.item_status = "key";
 	}
 
 	public void keyPressed(KeyEvent e) {
