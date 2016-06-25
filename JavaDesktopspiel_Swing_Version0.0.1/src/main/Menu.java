@@ -13,6 +13,7 @@ import buttons.MenuButton;
 import buttons.MenuSelection;
 import game.GameControl;
 import image.LoadBackground;
+import konstanten.BackgroundData;
 import konstanten.TextVars;
 import textfields.MenuShowtext;
 import textfields.MenuTextfield;
@@ -61,7 +62,7 @@ public class Menu implements ActionListener{
 		if(savetxt.size() < 1)
 			start_buttons[1].setEnabled(false);
 		
-		menu_bg = new LoadBackground(window, TextVars.menu_bg);
+		menu_bg = new LoadBackground(window, BackgroundData.menu_bg);
 	}
 	
 	public void initButtons(){
