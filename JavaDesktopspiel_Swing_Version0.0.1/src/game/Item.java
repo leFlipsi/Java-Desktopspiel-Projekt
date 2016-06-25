@@ -7,11 +7,9 @@ import main.Window;
 
 public class Item extends JPanel {
 	private LoadImage inventar_img;
-	private Window window;
 	private int width;
 
 	public Item(Window window, int load_x) {
-		this.window = window;
 		this.width = 48;
 		this.setOpaque(false);
 		this.setLayout(null);

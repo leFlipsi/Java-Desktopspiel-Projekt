@@ -12,7 +12,6 @@ import main.Menu;
 import main.Window;
 
 public class GameControl extends Canvas implements Runnable, KeyListener {
-	private static final long serialVersionUID = 1L;
 	private boolean active, way_h_free, way_v_free, e_pressed;
 	private String id, charaktername, spielstandname, item_status;
 	private int player_pos_x, player_pos_y, player_rotation, width, running, bg_border_x, bg_border_y, locx, locy;
@@ -119,8 +118,8 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 			}
 			if (System.currentTimeMillis() - timer > 1000) {
 				timer += 1000;
-				window.setTitle(TextVars.window_title + " | Charakter: " + charaktername + " | Spielstand: "
-						+ spielstandname + " | FPS: " + renders + " | UPS: " + updates);
+				window.setTitle(TextVars.window_title + " | Spielstand: " + id + " | Charakter: " + charaktername
+						+ " | Spielstand: " + spielstandname + " | FPS: " + renders + " | UPS: " + updates);
 				renders = 0;
 				updates = 0;
 			}
@@ -136,8 +135,8 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 		freeWay();
 		if (!e_pressed) {
 			if (way_h_free && way_v_free) {
-				if (walking[2] - walking[3] != 0 && walking[0] - walking[1] != 0 && (bg.getLocation().x - 32) % 64 == 0
-						&& (bg.getLocation().y % 64) == 0) {
+				if (walking[2] - walking[3] != 0 && walking[0] - walking[1] != 0
+						&& (bg.getLocation().x - 32) % width == 0 && (bg.getLocation().y % width) == 0) {
 					bg.resetPosition(running * (walking[2] - walking[3]), 0);
 				} else {
 					bg.resetPosition(running * (walking[2] - walking[3]), running * (walking[0] - walking[1]));
@@ -169,17 +168,17 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 	}
 
 	public void walkingXCheckY() {
-		if (locx % 64 == -32) {
-			player_pos_x = -1 * (locx + 32) / 64;
+		if (locx % width == -32) {
+			player_pos_x = -1 * (locx + 32) / width;
 		} else {
-			if (-1 * (locx - 32) / 64 > player_pos_x) {
+			if (-1 * (locx - 32) / width > player_pos_x) {
 				if (yplus1 < bg.getData(bg_border_y + player_pos_y + 1, bg_border_x + player_pos_x + 1)) {
 					yplus1 = bg.getData(bg_border_y + player_pos_y + 1, bg_border_x + player_pos_x + 1);
 				}
 				if (yminus1 < bg.getData(bg_border_y + player_pos_y - 1, bg_border_x + player_pos_x + 1)) {
 					yminus1 = bg.getData(bg_border_y + player_pos_y - 1, bg_border_x + player_pos_x + 1);
 				}
-			} else if (-1 * (locx + 32) / 64 < player_pos_x) {
+			} else if (-1 * (locx + 32) / width < player_pos_x) {
 				if (yplus1 < bg.getData(bg_border_y + player_pos_y + 1, bg_border_x + player_pos_x - 1)) {
 					yplus1 = bg.getData(bg_border_y + player_pos_y + 1, bg_border_x + player_pos_x - 1);
 				}
@@ -191,17 +190,17 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 	}
 
 	public void walkingYCheckX() {
-		if (locy % 64 == 0) {
-			player_pos_y = -1 * locy / 64;
+		if (locy % width == 0) {
+			player_pos_y = -1 * locy / width;
 		} else {
-			if (-1 * locy / 64 < player_pos_y) {
+			if (-1 * locy / width < player_pos_y) {
 				if (xplus1 < bg.getData(bg_border_y + player_pos_y - 1, bg_border_x + player_pos_x + 1)) {
 					xplus1 = bg.getData(bg_border_y + player_pos_y - 1, bg_border_x + player_pos_x + 1);
 				}
 				if (xminus1 < bg.getData(bg_border_y + player_pos_y - 1, bg_border_x + player_pos_x - 1)) {
 					xminus1 = bg.getData(bg_border_y + player_pos_y - 1, bg_border_x + player_pos_x - 1);
 				}
-			} else if (-1 * locy / 64 + 1 > player_pos_y) {
+			} else if (-1 * locy / width + 1 > player_pos_y) {
 				if (xplus1 < bg.getData(bg_border_y + player_pos_y + 1, bg_border_x + player_pos_x + 1)) {
 					xplus1 = bg.getData(bg_border_y + player_pos_y + 1, bg_border_x + player_pos_x + 1);
 				}
@@ -231,14 +230,14 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 	}
 
 	public void finishStep() {
-		if (-1 * bg.getLocation().x % 64 != 32 && walking[2] - walking[3] == 0) {
+		if (-1 * bg.getLocation().x % width != 32 && walking[2] - walking[3] == 0) {
 			if (lastActive[1] == 1) {
 				bg.resetPosition((lastActive[1] - walking[3]), 0);
 			} else if (lastActive[1] == -1) {
 				bg.resetPosition((walking[2] + lastActive[1]), 0);
 			}
 		}
-		if (bg.getLocation().y % 64 != 0 && walking[0] - walking[1] == 0) {
+		if (bg.getLocation().y % width != 0 && walking[0] - walking[1] == 0) {
 			if (lastActive[0] == 1) {
 				bg.resetPosition(0, (lastActive[0] - walking[1]));
 			} else if (lastActive[0] == -1) {
@@ -249,19 +248,19 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 
 	public void walkAnimationH() {
 		int x = bg.getLocation().x;
-		if (0 <= -1 * ((x + 32) % 64) && -1 * ((x + 32) % 64) <= 15) {
+		if (0 <= -1 * ((x + 32) % width) && -1 * ((x + 32) % width) <= 15) {
 			charakter[0].setVisible(true);
 			charakter[3].setVisible(false);
 			charakter[1].setVisible(false);
-		} else if (16 <= -1 * ((x + 32) % 64) && -1 * ((x + 32) % 64) <= 31) {
+		} else if (16 <= -1 * ((x + 32) % width) && -1 * ((x + 32) % width) <= 31) {
 			charakter[1].setVisible(true);
 			charakter[0].setVisible(false);
 			charakter[2].setVisible(false);
-		} else if (32 <= -1 * ((x + 32) % 64) && -1 * ((x + 32) % 64) <= 47) {
+		} else if (32 <= -1 * ((x + 32) % width) && -1 * ((x + 32) % width) <= 47) {
 			charakter[2].setVisible(true);
 			charakter[1].setVisible(false);
 			charakter[3].setVisible(false);
-		} else if (48 <= -1 * ((x + 32) % 64) && -1 * ((x + 32) % 64) <= 64) {
+		} else if (48 <= -1 * ((x + 32) % width) && -1 * ((x + 32) % width) <= width) {
 			charakter[3].setVisible(true);
 			charakter[2].setVisible(false);
 			charakter[0].setVisible(false);

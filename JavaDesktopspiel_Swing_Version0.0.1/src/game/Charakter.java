@@ -7,11 +7,9 @@ import main.Window;
 
 public class Charakter extends JPanel {
 	private LoadImage char_img;
-	private Window window;
 	private int width;
 
 	public Charakter(Window window, int x, int y) {
-		this.window = window;
 		this.width = 64;
 		this.setOpaque(false);
 		this.setLayout(null);

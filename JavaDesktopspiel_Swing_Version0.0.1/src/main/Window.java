@@ -18,7 +18,7 @@ public class Window extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLayout(null);
 		this.setVisible(true);
-		menu = new Menu(this, "start");
+		setMenu(new Menu(this, "start"));
 	}
 
 	public void resetWindowScale(int w, int h) {
@@ -41,5 +41,13 @@ public class Window extends JFrame {
 				Window window = new Window(TextVars.window_title);
 			}
 		});
+	}
+
+	public Menu getMenu() {
+		return menu;
+	}
+
+	public void setMenu(Menu menu) {
+		this.menu = menu;
 	}
 }
