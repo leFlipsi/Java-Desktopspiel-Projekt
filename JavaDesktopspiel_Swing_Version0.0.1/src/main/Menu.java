@@ -46,7 +46,7 @@ public class Menu implements ActionListener{
 		this.load_showtext = new MenuShowtext[3];
 		this.ingame_buttons = new MenuButton[3];
 		
-		this.file = new File("./src/files/save.txt");
+		this.file = new File("./save.txt");
 		this.savetxt = new ArrayList<String>();
 		
 		this.button_width = 192;
