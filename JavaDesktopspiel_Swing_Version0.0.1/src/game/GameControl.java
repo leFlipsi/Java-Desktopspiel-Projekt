@@ -11,11 +11,17 @@ import konstanten.TextVars;
 import main.Menu;
 import main.Window;
 
+/**
+ * GameControl-Klasse
+ * 
+ * @author Philipp Röhlicke, Tim Ziegelbauer, Cedric Röhr
+ * @version 1.0
+ */
 public class GameControl extends Canvas implements Runnable, KeyListener {
 	private boolean active, way_h_free, way_v_free, e_pressed;
 	private String id, charaktername, spielstandname, item_status;
 	private int player_pos_x, player_pos_y, player_rotation, width, running, bg_border_x, bg_border_y, locx, locy;
-	private double bg_unwalkable, xplus1, xminus1, yplus1, yminus1;
+	private double bg_unwalkable, rechts, links, unten, oben;
 	private Window window;
 	private Charakter[] charakter;
 	private Inventar inventar;
@@ -25,6 +31,12 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 	private Thread game;
 	private Menu menu;
 
+	/**
+	 * Konstruktor
+	 * 
+	 * @param window
+	 * @param menu
+	 */
 	public GameControl(Window window, Menu menu) {
 		this.menu = menu;
 		Dimension dim = new Dimension(window.getWidth(), window.getHeight());
@@ -49,19 +61,28 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 		this.bg_border_y = 4;
 		this.bg_unwalkable = 32.0;
 		this.width = 64;
-		charakter = new Charakter[4];
-		charakter[0] = new Charakter(window, 0, 0);
-		charakter[0].setVisible(false);
-		charakter[1] = new Charakter(window, 16, 0);
-		charakter[1].setVisible(false);
-		charakter[2] = new Charakter(window, 32, 0);
-		charakter[2].setVisible(false);
-		charakter[3] = new Charakter(window, 48, 0);
-		charakter[3].setVisible(false);
+		charakter = new Charakter[20];
+		for (int i = 0; i < 20; i++) {
+			charakter[i] = new Charakter(window, (i % 10) * 16, (i / 10) * 16);
+			charakter[i].setVisible(false);
+		}
 		inventar = new Inventar(window);
 		inventar.setVisible(false);
 	}
 
+	/**
+	 * setActive - Methode, wird ausgeführt, wenn ein Spiel geladen oder
+	 * erstellt wird
+	 * 
+	 * @param id
+	 * @param charaktername
+	 * @param spielstandname
+	 * @param item_status
+	 * @param player_x
+	 * @param player_y
+	 * @param player_rotation
+	 * @param bg
+	 */
 	public void setActive(String id, String charaktername, String spielstandname, String item_status, int player_x,
 			int player_y, int player_rotation, LoadBackground bg) {
 		this.bg = bg;
@@ -80,12 +101,18 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 		window.setTitle(TextVars.window_title + " | Charakter: " + charaktername + " | Spielstand: " + spielstandname);
 	}
 
+	/**
+	 * start - Methode, startet den "game"-Thread
+	 */
 	public synchronized void start() {
 		this.active = true;
 		game = new Thread(this, "Game");
 		game.start();
 	}
 
+	/**
+	 * stop - Methode, stopt den "game"-Thread
+	 */
 	public synchronized void stop() {
 		this.active = false;
 		try {
@@ -95,6 +122,9 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 		}
 	}
 
+	/**
+	 * @see java.lang.Runnable#run()
+	 */
 	@Override
 	public void run() {
 		long lastTime = System.nanoTime();
@@ -126,6 +156,11 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 		}
 	}
 
+	/**
+	 * render - Methode, wird 120x/Sekunde von der run-Methode aufgerufen
+	 * 
+	 * @see #run()
+	 */
 	private void render() {
 		locx = bg.getLocation().x;
 		locy = bg.getLocation().y;
@@ -150,156 +185,280 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 		finishStep();
 	}
 
+	/**
+	 * update - Methode wird so oft wie möglich bei laufendem Spiel von der
+	 * run-Methode aufgerufen
+	 * 
+	 * @see #run()
+	 */
 	private void update() {
-		walkAnimationH();
-		locx = bg.getLocation().x;
-		locy = bg.getLocation().y;
+		animation();
 		nextStepBackground();
 		walkingXCheckY();
 		walkingYCheckX();
 		freeWay();
 	}
 
+	/**
+	 * nextStepBackground - Methode erkennt die Hintergrunddaten (double) für
+	 * die Hintergrundfelder direkt neben dem Charakter
+	 */
 	public void nextStepBackground() {
-		xplus1 = bg.getData(bg_border_y + player_pos_y, bg_border_x + player_pos_x + 1);
-		xminus1 = bg.getData(bg_border_y + player_pos_y, bg_border_x + player_pos_x - 1);
-		yplus1 = bg.getData(bg_border_y + player_pos_y + 1, bg_border_x + player_pos_x);
-		yminus1 = bg.getData(bg_border_y + player_pos_y - 1, bg_border_x + player_pos_x);
+		rechts = bg.getData(bg_border_y + player_pos_y, bg_border_x + player_pos_x + 1);
+		links = bg.getData(bg_border_y + player_pos_y, bg_border_x + player_pos_x - 1);
+		unten = bg.getData(bg_border_y + player_pos_y + 1, bg_border_x + player_pos_x);
+		oben = bg.getData(bg_border_y + player_pos_y - 1, bg_border_x + player_pos_x);
 	}
 
+	/**
+	 * walkingXCheckY - Methode erkennt die Hintergrunddaten (double) für die
+	 * Hintergrundfelder direkt über und unter dem Charakter, wenn der Charakter
+	 * sich gerade bewegt, sich dementsprechend also zwischen 2
+	 * Hintergrundfeldern (horizontal) befindet
+	 */
 	public void walkingXCheckY() {
 		if (locx % width == -32) {
 			player_pos_x = -1 * (locx + 32) / width;
 		} else {
 			if (-1 * (locx - 32) / width > player_pos_x) {
-				if (yplus1 < bg.getData(bg_border_y + player_pos_y + 1, bg_border_x + player_pos_x + 1)) {
-					yplus1 = bg.getData(bg_border_y + player_pos_y + 1, bg_border_x + player_pos_x + 1);
+				if (unten < bg.getData(bg_border_y + player_pos_y + 1, bg_border_x + player_pos_x + 1)) {
+					unten = bg.getData(bg_border_y + player_pos_y + 1, bg_border_x + player_pos_x + 1);
 				}
-				if (yminus1 < bg.getData(bg_border_y + player_pos_y - 1, bg_border_x + player_pos_x + 1)) {
-					yminus1 = bg.getData(bg_border_y + player_pos_y - 1, bg_border_x + player_pos_x + 1);
+				if (oben < bg.getData(bg_border_y + player_pos_y - 1, bg_border_x + player_pos_x + 1)) {
+					oben = bg.getData(bg_border_y + player_pos_y - 1, bg_border_x + player_pos_x + 1);
 				}
 			} else if (-1 * (locx + 32) / width < player_pos_x) {
-				if (yplus1 < bg.getData(bg_border_y + player_pos_y + 1, bg_border_x + player_pos_x - 1)) {
-					yplus1 = bg.getData(bg_border_y + player_pos_y + 1, bg_border_x + player_pos_x - 1);
+				if (unten < bg.getData(bg_border_y + player_pos_y + 1, bg_border_x + player_pos_x - 1)) {
+					unten = bg.getData(bg_border_y + player_pos_y + 1, bg_border_x + player_pos_x - 1);
 				}
-				if (yminus1 < bg.getData(bg_border_y + player_pos_y - 1, bg_border_x + player_pos_x - 1)) {
-					yminus1 = bg.getData(bg_border_y + player_pos_y - 1, bg_border_x + player_pos_x - 1);
+				if (oben < bg.getData(bg_border_y + player_pos_y - 1, bg_border_x + player_pos_x - 1)) {
+					oben = bg.getData(bg_border_y + player_pos_y - 1, bg_border_x + player_pos_x - 1);
 				}
 			}
 		}
 	}
 
+	/**
+	 * walkingYCheckX - Methode erkennt die Hintergrunddaten (double) für die
+	 * Hintergrundfelder direkt links und rechts vom Charakter, wenn der
+	 * Charakter sich gerade bewegt, sich dementsprechend also zwischen 2
+	 * Hintergrundfeldern (vertikal) befindet
+	 */
 	public void walkingYCheckX() {
 		if (locy % width == 0) {
 			player_pos_y = -1 * locy / width;
 		} else {
 			if (-1 * locy / width < player_pos_y) {
-				if (xplus1 < bg.getData(bg_border_y + player_pos_y - 1, bg_border_x + player_pos_x + 1)) {
-					xplus1 = bg.getData(bg_border_y + player_pos_y - 1, bg_border_x + player_pos_x + 1);
+				if (rechts < bg.getData(bg_border_y + player_pos_y - 1, bg_border_x + player_pos_x + 1)) {
+					rechts = bg.getData(bg_border_y + player_pos_y - 1, bg_border_x + player_pos_x + 1);
 				}
-				if (xminus1 < bg.getData(bg_border_y + player_pos_y - 1, bg_border_x + player_pos_x - 1)) {
-					xminus1 = bg.getData(bg_border_y + player_pos_y - 1, bg_border_x + player_pos_x - 1);
+				if (links < bg.getData(bg_border_y + player_pos_y - 1, bg_border_x + player_pos_x - 1)) {
+					links = bg.getData(bg_border_y + player_pos_y - 1, bg_border_x + player_pos_x - 1);
 				}
 			} else if (-1 * locy / width + 1 > player_pos_y) {
-				if (xplus1 < bg.getData(bg_border_y + player_pos_y + 1, bg_border_x + player_pos_x + 1)) {
-					xplus1 = bg.getData(bg_border_y + player_pos_y + 1, bg_border_x + player_pos_x + 1);
+				if (rechts < bg.getData(bg_border_y + player_pos_y + 1, bg_border_x + player_pos_x + 1)) {
+					rechts = bg.getData(bg_border_y + player_pos_y + 1, bg_border_x + player_pos_x + 1);
 				}
-				if (xminus1 < bg.getData(bg_border_y + player_pos_y + 1, bg_border_x + player_pos_x - 1)) {
-					xminus1 = bg.getData(bg_border_y + player_pos_y + 1, bg_border_x + player_pos_x - 1);
+				if (links < bg.getData(bg_border_y + player_pos_y + 1, bg_border_x + player_pos_x - 1)) {
+					links = bg.getData(bg_border_y + player_pos_y + 1, bg_border_x + player_pos_x - 1);
 				}
 
 			}
 		}
 	}
 
+	/**
+	 * freeWay - Methode hinterlegt in Variablen, ob der Charakter sich
+	 * horizontal/vertikal bewegen darf
+	 */
 	public void freeWay() {
-		if (((locx >= -32 || xminus1 >= bg_unwalkable) && walking[2] > 0)
-				|| ((locx <= -1 * (bg.getWidth() - window.getWidth() - charakter[0].getWidth() / 2)
-						|| xplus1 >= bg_unwalkable) && walking[3] > 0)) {
+		if (((locx >= -32 || links >= bg_unwalkable) && walking[2] > 0) || rechts >= bg_unwalkable && walking[3] > 0) {
 			way_h_free = false;
 		} else {
 			way_h_free = true;
 		}
-		if (((locy >= 0 || yminus1 >= bg_unwalkable) && walking[0] > 0)
-				|| ((locy <= -1 * (bg.getHeight() - window.getHeight()) || yplus1 >= bg_unwalkable)
-						&& walking[1] > 0)) {
+		if (((locy >= 0 || oben >= bg_unwalkable) && walking[0] > 0) || unten >= bg_unwalkable && walking[1] > 0) {
 			way_v_free = false;
 		} else {
 			way_v_free = true;
 		}
 	}
 
+	/**
+	 * finishStep - Methode beendet die Bewegung, wenn der Charakter sich
+	 * zwischen Hintergrundfeldern befindet und die Bewegungstasten losgelassen
+	 * wurden
+	 */
 	public void finishStep() {
-		if (-1 * bg.getLocation().x % width != 32 && walking[2] - walking[3] == 0) {
+		if (-1 * locx % width != 32 && walking[2] - walking[3] == 0) {
 			if (lastActive[1] == 1) {
 				bg.resetPosition((lastActive[1] - walking[3]), 0);
 			} else if (lastActive[1] == -1) {
 				bg.resetPosition((walking[2] + lastActive[1]), 0);
 			}
+		} else {
+			lastActive[1] = 0;
 		}
-		if (bg.getLocation().y % width != 0 && walking[0] - walking[1] == 0) {
+		if (locy % width != 0 && walking[0] - walking[1] == 0) {
 			if (lastActive[0] == 1) {
 				bg.resetPosition(0, (lastActive[0] - walking[1]));
 			} else if (lastActive[0] == -1) {
 				bg.resetPosition(0, (walking[0] + lastActive[0]));
 			}
+		} else {
+			lastActive[0] = 0;
 		}
 	}
 
+	/**
+	 * animation - Methode erkennt ob der Spieler sich gerade bewegt oder nicht
+	 * bei keiner Bewegung werden die standbilder des Charakters sichtbar bei
+	 * Bewegung werden die Animations-Methoden aufgerufen
+	 * 
+	 * @see #walkAnimationH()
+	 * @see #walkAnimationV()
+	 */
+	public void animation() {
+		if (walking[0] == 0 && walking[1] == 0 && walking[2] == 0 && walking[3] == 0 && lastActive[1] == 0
+				&& lastActive[0] == 0) {
+			if (this.player_rotation == 0) {
+				animationVisibility(15);
+			} else if (this.player_rotation == 2) {
+				animationVisibility(14);
+			} else if (this.player_rotation == 1) {
+				animationVisibility(5);
+			} else if (this.player_rotation == 3) {
+				animationVisibility(4);
+			}
+		} else {
+			walkAnimationH();
+			walkAnimationV();
+		}
+	}
+
+	/**
+	 * walkAnimationH - Methode lädt die Animationsbilder bei horizontaler
+	 * Bewegung bei Bewegung in horizontaler und vertikaler Richtung ist die
+	 * Animation für die horizontale Bewegung dominant
+	 */
 	public void walkAnimationH() {
-		int x = bg.getLocation().x;
-		if (0 <= -1 * ((x + 32) % width) && -1 * ((x + 32) % width) <= 15) {
-			charakter[0].setVisible(true);
-			charakter[3].setVisible(false);
-			charakter[1].setVisible(false);
-		} else if (16 <= -1 * ((x + 32) % width) && -1 * ((x + 32) % width) <= 31) {
-			charakter[1].setVisible(true);
-			charakter[0].setVisible(false);
-			charakter[2].setVisible(false);
-		} else if (32 <= -1 * ((x + 32) % width) && -1 * ((x + 32) % width) <= 47) {
-			charakter[2].setVisible(true);
-			charakter[1].setVisible(false);
-			charakter[3].setVisible(false);
-		} else if (48 <= -1 * ((x + 32) % width) && -1 * ((x + 32) % width) <= width) {
-			charakter[3].setVisible(true);
-			charakter[2].setVisible(false);
-			charakter[0].setVisible(false);
+		boolean links = walking[2] == 1
+				|| (walking[3] == 0 && lastActive[1] == 1 && walking[0] == 0 && walking[1] == 0);
+		boolean rechts = walking[3] == 1
+				|| (walking[2] == 0 && lastActive[1] == -1 && walking[0] == 0 && walking[1] == 0);
+		if (0 <= -1 * ((locx + 32) % width) && -1 * ((locx + 32) % width) <= 15) {
+			if (links)
+				animationVisibility(0);
+			if (rechts)
+				animationVisibility(6);
+		} else if (16 <= -1 * ((locx + 32) % width) && -1 * ((locx + 32) % width) <= 31) {
+			if (links)
+				animationVisibility(1);
+			if (rechts)
+				animationVisibility(7);
+		} else if (32 <= -1 * ((locx + 32) % width) && -1 * ((locx + 32) % width) <= 47) {
+			if (links)
+				animationVisibility(2);
+			if (rechts)
+				animationVisibility(8);
+		} else if (48 <= -1 * ((locx + 32) % width) && -1 * ((locx + 32) % width) <= width) {
+			if (links)
+				animationVisibility(3);
+			if (rechts)
+				animationVisibility(9);
 		}
 	}
 
+	/**
+	 * walkAnimationV - Methode lädt die Animationsbilder bei vertikaler
+	 * Bewegung
+	 */
+	public void walkAnimationV() {
+		boolean hoch = (walking[0] == 1);
+		boolean runter = (walking[1] == 1);
+		if (walking[2] == 0 && walking[3] == 0) {
+			if (0 <= -1 * (locy % width) && -1 * (locy % width) <= 15) {
+				if (runter)
+					animationVisibility(10);
+				if (hoch)
+					animationVisibility(16);
+			} else if (16 <= -1 * (locy % width) && -1 * (locy % width) <= 31) {
+				if (runter)
+					animationVisibility(11);
+				if (hoch)
+					animationVisibility(17);
+			} else if (32 <= -1 * (locy % width) && -1 * (locy % width) <= 47) {
+				if (runter)
+					animationVisibility(12);
+				if (hoch)
+					animationVisibility(18);
+			} else if (48 <= -1 * (locy % width) && -1 * (locy % width) <= width) {
+				if (runter)
+					animationVisibility(13);
+				if (hoch)
+					animationVisibility(19);
+			}
+		}
+	}
+
+	/**
+	 * animationVisibility - Methode zeigt das Charakterbild am Parameter t und
+	 * versteckt alle anderen Charakterbilder
+	 * 
+	 * @param t
+	 */
+	private void animationVisibility(int t) {
+		charakter[t].setVisible(true);
+		for (int i = 0; i < charakter.length; i++) {
+			if (i != t)
+				charakter[i].setVisible(false);
+		}
+	}
+
+	/**
+	 * pickUpItem - Methode sorgt je nach Position und Itemstatus für das
+	 * Aufheben/Benutzen von Items
+	 */
 	public void pickUpItem() {
 		if (this.player_rotation == 0) { // W -> von UNTEN
-			if (Math.floor((yminus1 - Math.floor(yminus1)) * 10) / 10 == 0.1) {
+			if (Math.floor((oben - Math.floor(oben)) * 10) / 10 == 0.1) {
 				item_pickUpStone();
 			}
-			if (Math.floor((yminus1 - Math.floor(yminus1)) * 10) / 10 == 0.2 && this.item_status == "stein") {
+			if (Math.floor((oben - Math.floor(oben)) * 10) / 10 == 0.2 && this.item_status == "stein") {
 				item_openChest();
 			}
 		} else if (this.player_rotation == 1) { // D -> von RECHTS
-			if (Math.floor((xplus1 - Math.floor(xplus1)) * 10) / 10 == 0.1) {
+			if (Math.floor((rechts - Math.floor(rechts)) * 10) / 10 == 0.1) {
 				item_pickUpStone();
 			}
-			if (Math.floor((xplus1 - Math.floor(xplus1)) * 10) / 10 == 0.5 && this.item_status == "key") {
+			if ((Math.floor((rechts - Math.floor(rechts)) * 10) / 10 == 0.7
+					|| Math.floor((rechts - Math.floor(rechts)) * 10) / 10 == 0.9) && this.item_status == "key") {
 				System.out.println("OPEN");
 				item_openDoor();
 			}
 		} else if (this.player_rotation == 2) { // S -> von OBEN
-			if (Math.floor((yplus1 - Math.floor(yplus1)) * 10) / 10 == 0.1) {
+			if (Math.floor((unten - Math.floor(unten)) * 10) / 10 == 0.1) {
 				item_pickUpStone();
 			}
 		} else if (this.player_rotation == 3) { // A -> von LINKS
-			if (Math.floor((xminus1 - Math.floor(xminus1)) * 10) / 10 == 0.1) {
+			if (Math.floor((links - Math.floor(links)) * 10) / 10 == 0.1) {
 				item_pickUpStone();
 			}
 		}
 	}
 
+	/**
+	 * item_pickUpStone - Methode hebt den Stein auf
+	 */
 	public void item_pickUpStone() {
 		bg.setBackupTexture(0);
 		inv_items.get(0).setVisible(true);
 		this.item_status = "stein";
 	}
 
+	/**
+	 * item_openChest - Methode öffnet die Truhe
+	 */
 	public void item_openChest() {
 		bg.setBackupTexture(1);
 		inv_items.get(0).setVisible(false);
@@ -307,11 +466,17 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 		this.item_status = "key";
 	}
 
+	/**
+	 * item_openDoor - Methode öffnet die Türen
+	 */
 	public void item_openDoor() {
 		bg.setBackupTexture(2);
 		bg.setBackupTexture(3);
 	}
 
+	/**
+	 * @see java.awt.event.KeyListener#keyPressed(java.awt.event.KeyEvent)
+	 */
 	public void keyPressed(KeyEvent e) {
 		if (active) {
 			if (e.getKeyCode() == KeyEvent.VK_W) {
@@ -349,6 +514,9 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 		}
 	}
 
+	/**
+	 * @see java.awt.event.KeyListener#keyReleased(java.awt.event.KeyEvent)
+	 */
 	public void keyReleased(KeyEvent e) {
 		if (active) {
 			if (e.getKeyCode() == KeyEvent.VK_W) {
@@ -380,6 +548,9 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 		}
 	}
 
+	/**
+	 * @see java.awt.event.KeyListener#keyTyped(java.awt.event.KeyEvent)
+	 */
 	@Override
 	public void keyTyped(KeyEvent e) {
 

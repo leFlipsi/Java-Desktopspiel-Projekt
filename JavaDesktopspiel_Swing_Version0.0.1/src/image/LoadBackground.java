@@ -45,14 +45,25 @@ public class LoadBackground extends JPanel {
 							false));
 					item_i.add(i);
 					item_j.add(j);
-				}else if (Math.floor((data[i][j] - Math.floor(data[i][j])) * 10) / 10 == 0.5) {
+				}else if (Math.floor((data[i][j] - Math.floor(data[i][j])) * 10) / 10 == 0.7) {
 					images_backup.add(new LoadImage(j * width, i * width, width, (int) data[i][j] % 8 * load,
 							(int) Math.floor(data[i][j] / 8) * load, load, "sprite.png", this, false));
 					images_backup.get(images_backup.size() - 1).setVisible(false);
-					images.add(new LoadImage(j * width, i * width, width, 7 * load, 5 * load, load, "sprite.png", this,
+					images.add(new LoadImage(j * width, i * width, width, 0 * load, 6 * load, load, "sprite.png", this,
 							false));
 					item_i.add(i);
 					item_j.add(j);
+				}else if (Math.floor((data[i][j] - Math.floor(data[i][j])) * 10) / 10 == 0.9) {
+					images_backup.add(new LoadImage(j * width, i * width, width, (int) data[i][j] % 8 * load,
+							(int) Math.floor(data[i][j] / 8) * load, load, "sprite.png", this, false));
+					images_backup.get(images_backup.size() - 1).setVisible(false);
+					images.add(new LoadImage(j * width, i * width, width, 1 * load, 6 * load, load, "sprite.png", this,
+							false));
+					item_i.add(i);
+					item_j.add(j);
+				}
+				if(Math.floor((data[i][j] - Math.floor(data[i][j])) * 10) / 10 != 0.0) {
+					System.out.println(Math.floor((data[i][j] - Math.floor(data[i][j])) * 10) / 10);
 				}
 
 			}

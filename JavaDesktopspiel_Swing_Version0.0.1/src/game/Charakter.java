@@ -20,4 +20,5 @@ public class Charakter extends JPanel {
 		this.setVisible(true);
 		window.add(this);
 	}
+
 }

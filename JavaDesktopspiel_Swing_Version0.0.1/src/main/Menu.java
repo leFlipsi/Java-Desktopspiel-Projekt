@@ -21,7 +21,7 @@ import textfields.MenuTextfield;
 public class Menu implements ActionListener{	
 	private Window window;
 	private int button_width, button_height, button_difference, field_difference;
-	private MenuButton load_cancel;
+	private MenuButton load_cancle;
 	private MenuButton[] start_buttons, option_buttons, create_buttons, load_buttons, ingame_buttons;
 	private MenuTextfield[] create_fields;
 	private MenuSelection o_windowscaleList;
@@ -55,7 +55,7 @@ public class Menu implements ActionListener{
 		this.field_difference = -128;
 		
 		this.game = new GameControl(window, this);
-		window.add(game);						//TODO  -  Test
+		window.add(game);
 		initButtons();
 		setMenu(type);
 		
@@ -96,8 +96,8 @@ public class Menu implements ActionListener{
 			ingame_buttons[i] = new MenuButton(TextVars.ingame_button_text[i], (i*button_difference)-button_difference, -1, button_width, button_height, window);
 			ingame_buttons[i].addActionListener(this);
 		}
-		this.load_cancel = new MenuButton(TextVars.create_button_text[0], 3*button_difference-button_height/2, -1, button_width*3, button_height, window);
-		this.load_cancel.addActionListener(this);
+		this.load_cancle = new MenuButton(TextVars.create_button_text[0], 3*button_difference-button_height/2, -1, button_width*3, button_height, window);
+		this.load_cancle.addActionListener(this);
 		o_windowscaleList = new MenuSelection(o_scales, -button_difference, button_width, button_height, window, this);
 	}
 	
@@ -114,7 +114,7 @@ public class Menu implements ActionListener{
 		}else if(type == "load_game"){
 			showButtons(id.length, load_buttons);
 			showShowTexts(load_showtext);
-			load_cancel.setVisible(true);
+			load_cancle.setVisible(true);
 		}else if(type == "ingame"){
 			game.start();
 		}else if(type == "ingame_menu"){
@@ -177,7 +177,7 @@ public class Menu implements ActionListener{
 		hideButtons(load_buttons, 0);
 		hideTextfields(create_fields);
 		hideShowTexts(load_showtext, 0);
-		load_cancel.setVisible(false);
+		load_cancle.setVisible(false);
 	}
 
 	public void saveGame(String char_name, String game_name, int delete_id){
@@ -309,8 +309,9 @@ public class Menu implements ActionListener{
         	start_buttons[0].setButtonBounds(start_buttons);
         	option_buttons[0].setButtonBounds(option_buttons);
         	create_buttons[0].setButtonBounds(create_buttons);
+        	ingame_buttons[0].setButtonBounds(ingame_buttons);
         	create_fields[0].resetBounds(create_fields);
-        	load_cancel.setButtonBounds();
+        	load_cancle.setButtonBounds();
         	o_windowscaleList.resetBounds();
         	for(int i = 0; i < load_showtext.length; i++){
         		try{
@@ -363,15 +364,14 @@ public class Menu implements ActionListener{
 			deleteGame(2);
 			setMenu("start");
 		}
-		if(e.getSource() == this.load_cancel){
+		if(e.getSource() == this.load_cancle){
 			setMenu("start");
 		}
 		
 		/*____________________Ingamemenü____________________*/
 		if(e.getSource() == this.ingame_buttons[0]){
 			setMenu("ingame");
-		}
-		if(e.getSource() == this.ingame_buttons[2]){
+		}else if(e.getSource() == this.ingame_buttons[2]){
 			System.exit(0);
 		}
 	}
