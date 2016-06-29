@@ -5,10 +5,19 @@ import javax.swing.JPanel;
 import image.LoadImage;
 import main.Window;
 
+/**
+ * Inventar Klasse
+ * 
+ * @author Philipp Röhlicke, Tim Ziegelbauer, Cedric Röhr
+ * @version 1.0
+ */
 public class Inventar extends JPanel {
 	private LoadImage inventar_img;
 	private int width;
 
+	/**
+	 * @param window Fensterobjekt
+	 */
 	public Inventar(Window window) {
 		this.width = 48;
 		this.setOpaque(false);

@@ -18,6 +18,12 @@ import konstanten.TextVars;
 import textfields.MenuShowtext;
 import textfields.MenuTextfield;
 
+/**
+ * Menu Klasse
+ * 
+ * @author Philipp Röhlicke, Tim Ziegelbauer, Cedric Röhr
+ * @version 1.0
+ */
 public class Menu implements ActionListener{	
 	private Window window;
 	private int button_width, button_height, button_difference, field_difference;
@@ -36,6 +42,10 @@ public class Menu implements ActionListener{
 	private BufferedReader br;
 	private LoadBackground menu_bg;
 	
+	/**
+	 * @param window Fensterobjekt
+	 * @param type Typ des Menüs (da der Konstruktor nur beim Start aufgerufen wird -> type = "start")
+	 */
 	public Menu(Window window, String type) {
 		this.window = window;
 		this.start_buttons = new MenuButton[3];
@@ -65,6 +75,9 @@ public class Menu implements ActionListener{
 		menu_bg = new LoadBackground(window, BackgroundData.menu_bg);
 	}
 	
+	/**
+	 * initButtons - Methode initialisiert die MenuButtons und weitere Menu-Objekte
+	 */
 	public void initButtons(){
 		explodeArraylistItems();
 		for(int i = 0; i < start_buttons.length; i++){
@@ -101,6 +114,11 @@ public class Menu implements ActionListener{
 		o_windowscaleList = new MenuSelection(o_scales, -button_difference, button_width, button_height, window, this);
 	}
 	
+	/**
+	 * setMenu - Methode zeigt das mit "type" angeforderte Menü
+	 * 
+	 * @param type Typ des Menüs
+	 */
 	public void setMenu(String type){
 		explodeArraylistItems();
 		hideAll();
@@ -125,32 +143,65 @@ public class Menu implements ActionListener{
 		window.getContentPane().repaint();
 	}
 	
-	
+	/**
+	 * Versteckt Buttons aus einer Liste ab dem Index "start"
+	 * 
+	 * @param button_list Liste aus MenuButton objekten
+	 * @param start Index
+	 */
 	public void hideButtons(MenuButton[] button_list, int start){
 		for(int i = start; i < button_list.length; i++){
 			button_list[i].setVisible(false);
 		}
 	}
+	/**
+	 * Zeigt Buttons aus einer Liste ab dem Index "start"
+	 * 
+	 * @param button_list Liste aus MenuButton objekten
+	 * @param start Index
+	 */
 	public void showButtons(MenuButton[] button_list, int start){
 		for(int i = start; i < button_list.length; i++){
 			button_list[i].setVisible(true);
 		}
 	}
+	/**
+	 * Zeigt Buttons aus einer Liste bis zum Index "stop"
+	 * 
+	 * @param stop Index
+	 * @param button_list Liste aus MenuButton objekten
+	 */
 	public void showButtons(int stop, MenuButton[] button_list){
 		for(int i = 0; i < stop*2; i++){
 			button_list[i].setVisible(true);
 		}
 	}
+	/**
+	 * Versteckt eine Liste mit MenuTextfield-Objekten
+	 * 
+	 * @param field_list Liste mit MenuTextfield-Objekten 
+	 */
 	public void hideTextfields(MenuTextfield[] field_list){
 		for(int i = 0; i < field_list.length; i++){
 			field_list[i].setVisible(false);
 		}
 	}
+	/**
+	 * Zeigt eine Liste mit MenuTextfield-Objekten
+	 * 
+	 * @param field_list Liste mit MenuTextfield-Objekten 
+	 */
 	public void showTextfields(MenuTextfield[] field_list){
 		for(int i = 0; i < field_list.length; i++){
 			field_list[i].setVisible(true);
 		}
 	}
+	/**
+	 * Versteckt Liste mit MenuShowtext-Objekten ab dem Index "start"
+	 * 
+	 * @param text Liste mit MenuShowtext-Objekten 
+	 * @param start Index
+	 */
 	public void hideShowTexts(MenuShowtext[] text, int start){
 		for(int i = start; i < text.length; i++){
 			if(load_showtext[i] != null){
@@ -160,6 +211,11 @@ public class Menu implements ActionListener{
 			}
 		}
 	}
+	/**
+	 * Zeigt Liste mit MenuShowtext-Objekten
+	 * 
+	 * @param text Liste mit MenuShowtext-Objekten 
+	 */
 	public void showShowTexts(MenuShowtext[] text){
 		for(int i = 0; i < text.length; i++){
 			if(load_showtext[i] != null){
@@ -169,6 +225,9 @@ public class Menu implements ActionListener{
 			}
 		}
 	}
+	/**
+	 * Versteckt alle Buttons etc
+	 */
 	public void hideAll(){
 		hideButtons(ingame_buttons, 0);
 		hideButtons(option_buttons, 0);
@@ -180,6 +239,11 @@ public class Menu implements ActionListener{
 		load_cancle.setVisible(false);
 	}
 
+	/**
+	 * @param char_name charaktername
+	 * @param game_name spielstandname
+	 * @param delete_id lösch - ID... -1 wenn nichts gelöscht werden soll -> index wenn Eintrag gelöscht werden soll
+	 */
 	public void saveGame(String char_name, String game_name, int delete_id){
 		try {
 			BufferedWriter bw = new BufferedWriter(new FileWriter(file)); 			//Löscht Inhalt!!!
@@ -203,6 +267,15 @@ public class Menu implements ActionListener{
             e.printStackTrace();
 		}
 	}
+	/**
+	 * Überschreibt bestehenden Spielstand
+	 * 
+	 * @param number ID
+	 * @param itemstatus Itemstatus
+	 * @param xposition X-Position des Spielers
+	 * @param yposition Y-Position des Spielers
+	 * @param rotation Rotation des Spielers
+	 */
 	public void overrideGame(int number, String itemstatus, int xposition, int yposition, int rotation){
 		try {
 			BufferedWriter bw = new BufferedWriter(new FileWriter(file)); 			//Löscht Inhalt!!!
@@ -226,6 +299,9 @@ public class Menu implements ActionListener{
             e.printStackTrace();
 		}
 	}
+	/**
+	 * Zerlegt gespeicherte Strings nach Trennzeichen
+	 */
 	public void explodeArraylistItems(){
 		loadToArraylist();
 		savetxt_array = new String[savetxt.size()];
@@ -255,12 +331,26 @@ public class Menu implements ActionListener{
 			shortSavetxt(i);
 		}
 	}
+	/**
+	 * gibt den Substring bis zum Trennungszeichen "|"
+	 * 
+	 * @param i Index
+	 * @return verkürzten String
+	 */
 	public String substringSavetxt(int i){
 		return savetxt_array[i].substring(0, savetxt_array[i].indexOf("|"));
 	}
+	/**
+	 * Kürzt den String beim Trennungszeichen
+	 * 
+	 * @param i Index des Trennungszeichens
+	 */
 	public void shortSavetxt(int i){
 		savetxt_array[i] = savetxt_array[i].substring(savetxt_array[i].indexOf("|")+1, savetxt_array[i].length());
 	}
+	/**
+	 * Lädt den Inhalt der save.txt Datei in eine Arraylist
+	 */
 	public void loadToArraylist(){
 		try{
 			br = new BufferedReader(new FileReader(file));
@@ -274,16 +364,29 @@ public class Menu implements ActionListener{
 		}
 	}
 	
+	/**
+	 * Lädt das Spiel am Index i und "springt" ingame
+	 * 
+	 * @param i Index
+	 */
 	public void loadGame(int i){
 		explodeArraylistItems();
 		game.setActive(id[i], charaktername[i], spielstandname[i], itemstatus[i], xposition[i], yposition[i], rotation[i], menu_bg);
 		setMenu("ingame");
 	}
+	/**
+	 * Löscht das Spiel am Index i
+	 * 
+	 * @param i Index
+	 */
 	public void deleteGame(int i){
 		saveGame("", "", i);
 	}
 	
 	/*__________________________________________ EVENT LISTENERS ____________________________________________________________*/
+	/**
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		/*____________________Startmenü____________________*/

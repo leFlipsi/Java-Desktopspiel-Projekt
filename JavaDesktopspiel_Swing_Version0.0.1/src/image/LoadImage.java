@@ -8,6 +8,12 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+/**
+ * LoadImage Klasse
+ * 
+ * @author Philipp Röhlicke, Tim Ziegelbauer, Cedric Röhr
+ * @version 1.0
+ */
 public class LoadImage extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private BufferedImage img;
@@ -17,6 +23,17 @@ public class LoadImage extends JPanel {
 	private JPanel panel;
 	private boolean is_charakter;
 
+	/**
+	 * @param sx X-Position des Bildes im Fenster
+	 * @param sy Y-Position des Bildes im Fenster
+	 * @param sw Breite des Bildes im Fenster
+	 * @param lx X-Position des Bildes in der Sprite
+	 * @param ly Y-Position des Bildes in der Sprite
+	 * @param lw Breite des Bildes in der Sprite
+	 * @param res Name der Sprite-Datei
+	 * @param panel Panel, auf welchem das Bild hinterlegt wird
+	 * @param is_charakter Ist das Bild ein Charakter? (Oder Inventar/Item)
+	 */
 	public LoadImage(int sx, int sy, int sw, int lx, int ly, int lw, String res, JPanel panel, boolean is_charakter) {
 		this.show_x = sx;
 		this.show_y = sy;
@@ -36,6 +53,9 @@ public class LoadImage extends JPanel {
 		panelSettings();
 	}
 
+	/**
+	 * panelSettings - Methode legt die Einstellungen für das Panel des Bildes fest
+	 */
 	public void panelSettings() {
 		this.setLayout(null);
 		this.setLocation(this.show_x, this.show_y);
@@ -48,6 +68,9 @@ public class LoadImage extends JPanel {
 		}
 	}
 
+	/**
+	 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
+	 */
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -64,6 +87,9 @@ public class LoadImage extends JPanel {
 		}
 	}
 
+	/**
+	 * TODO -> siehe LoadBackground
+	 */
 	public void resetScaling() {
 
 	}

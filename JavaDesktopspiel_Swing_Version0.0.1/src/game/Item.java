@@ -5,10 +5,20 @@ import javax.swing.JPanel;
 import image.LoadImage;
 import main.Window;
 
+/**
+ * Item Klasse
+ * 
+ * @author Philipp Röhlicke, Tim Ziegelbauer, Cedric Röhr
+ * @version 1.0
+ */
 public class Item extends JPanel {
 	private LoadImage inventar_img;
 	private int width;
 
+	/**
+	 * @param window Fensterobjekt
+	 * @param load_x Vielfaches von 16 - wählt das gewünschte Bild dieser Variable nach aus der Sprite-Datei aus
+	 */
 	public Item(Window window, int load_x) {
 		this.width = 48;
 		this.setOpaque(false);

@@ -6,6 +6,12 @@ import javax.swing.JPanel;
 
 import main.Window;
 
+/**
+ * LoadBackground Klasse
+ * 
+ * @author Philipp Röhlicke, Tim Ziegelbauer, Cedric Röhr
+ * @version 1.0
+ */
 public class LoadBackground extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private ArrayList<LoadImage> images, images_backup;
@@ -13,6 +19,12 @@ public class LoadBackground extends JPanel {
 	private int x_length, y_length, width, load;
 	private double[][] data;
 
+	/**
+	 * Konstruktor - Erstellt den Hintergrund und setzt Standards
+	 * 
+	 * @param window Fensterobjekt
+	 * @param data Hintergrunddaten als double[][] hinterlegt
+	 */
 	public LoadBackground(Window window, double[][] data) {
 		this.images_backup = new ArrayList<LoadImage>();
 		this.images = new ArrayList<LoadImage>();
@@ -74,6 +86,9 @@ public class LoadBackground extends JPanel {
 		window.add(this);
 	}
 
+	/**
+	 * resetScaling - Methode, UNUSED -> Ansatz für nicht priorisierte Story... -> TODO
+	 */
 	public void resetScaling() {
 		for (int i = 0; i < y_length; i++) {
 			for (int j = 0; j < x_length; j++) {
@@ -82,35 +97,67 @@ public class LoadBackground extends JPanel {
 		}
 	}
 
+	/**
+	 * resetPosition Methode verschiebt den Hintergrund
+	 * 
+	 * @param x_dir Wert, um den der Hintergrund in X-Richtung verschoben werden soll
+	 * @param y_dir Wert, um den der Hintergrund in Y-Richtung verschoben werden soll
+	 */
 	public void resetPosition(int x_dir, int y_dir) {
 		this.setLocation(this.getLocation().x + x_dir, this.getLocation().y + y_dir);
 	}
 	
+	/**
+	 * setPosition Methode verschiebt den Hintergrund zu einer bestimmten Position
+	 * 
+	 * @param x_dir Wert, auf den der Hintergrund in X-Position verschoben werden soll
+	 * @param y_dir Wert, auf den der Hintergrund in Y-Position verschoben werden soll
+	 */
 	public void setPosition(int x_dir, int y_dir) {
 		this.setLocation(x_dir, y_dir);
 	}
 
+	/**
+	 * @return Breite des Hintergrundes
+	 */
 	public int getXLength() {
 		return x_length;
 	}
 
+	/**
+	 * @return Höhe des Hintergrundes
+	 */
 	public int getYLength() {
 		return y_length;
 	}
 
+	/**
+	 * @return Breite/Höhe einer einzelnen Hintergrundeinheit
+	 */
 	public int getScale() {
 		return width;
 	}
 
+	/**
+	 * @param y Reihe der Hintergrundeinheit
+	 * @param x Spalte der Hintergrundeinheit
+	 * @return Hintergrundeinheit bei (X | Y)
+	 */
 	public double getData(int y, int x) {
 		return data[y][x];
 	}
 
+	/**
+	 * @param count nimmt das Backup-Bild und fügt es in den normalen Hintergrund ein -> BSP: Stein aufheben
+	 */
 	public void resetBackground(int count) {
 		images.set(item_i.get(count) * item_j.get(count), null);
 		images.set(item_i.get(count) * item_j.get(count), images_backup.get(count));
 	}
 	
+	/**
+	 * @param b setzt das Bestimmte Backup-Bild auf Visible
+	 */
 	public void setBackupTexture(int b){
 		images_backup.get(b).setVisible(true);
 	}

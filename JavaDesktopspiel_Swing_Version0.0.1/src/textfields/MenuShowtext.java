@@ -7,10 +7,28 @@ import javax.swing.JTextArea;
 
 import main.Window;
 
+/**
+ * MenuShowtext Klasse
+ * 
+ * @author Philipp Röhlicke, Tim Ziegelbauer, Cedric Röhr
+ * @version 1.0
+ */
 @SuppressWarnings("serial")
 public class MenuShowtext extends JTextArea{
 	private int width, height, x, y, border_y, difference, i;
 	private Window window;
+	/**
+	 * Erstellt das Objekt und setzt Standards
+	 * 
+	 * @param spielstand Spielstandname
+	 * @param charakter Charaktername
+	 * @param id ID
+	 * @param i Index des Textfeldes
+	 * @param field_width Breite
+	 * @param field_height Höhe
+	 * @param difference Abstand
+	 * @param window Fensterobjekt
+	 */
 	public MenuShowtext(String spielstand, String charakter, String id, int i, int field_width, int field_height, int difference, Window window){
 		this.width = field_width;
 		this.height = field_height;
@@ -26,10 +44,16 @@ public class MenuShowtext extends JTextArea{
 		this.resetBounds();
 		window.add(this);
 	}
+	/**
+	 * legt die Position des Objektes fest
+	 */
 	public void setPosition(){
 		this.x = (window.getWidth()/2)-(this.width/2)+difference-2*border_y;
 		this.y = (window.getHeight()/2)-(this.height/2)-difference*(i-1)-border_y*2;
 	}
+	/**
+	 * legt Position und Größe des Objektes fest
+	 */
 	public void resetBounds(){
 		this.setPosition();
 		this.setBounds(this.x, this.y, width, height);

@@ -7,6 +7,12 @@ import konstanten.TextVars;
 import main.Menu;
 import main.Window;
 
+/**
+ * MenuSelection Klasse
+ * 
+ * @author Philipp Röhlicke, Tim Ziegelbauer, Cedric Röhr
+ * @version 1.0
+ */
 public class MenuSelection implements TextVars, ActionListener{
 	
 	private MenuButton[] list;
@@ -14,6 +20,16 @@ public class MenuSelection implements TextVars, ActionListener{
 	private Menu menu;
 	private int y_difference, button_width, button_height;
 	
+	/**
+	 * Konstruktor - legt Standards fest / erstellt die Auswahl
+	 * 
+	 * @param text Text der auf dem Button angezeigt wird
+	 * @param y_difference abstand zu den anderen Auswahlmöglichkeiten (in Y-Richtung)
+	 * @param button_width Breite des Buttons
+	 * @param button_height Höhe des Buttons
+	 * @param window Fensterobjekt
+	 * @param menu Menüobjekt
+	 */
 	public MenuSelection(String[] text, int y_difference, int button_width, int button_height, Window window, Menu menu){
 		this.window = window;
 		this.menu = menu;
@@ -28,23 +44,35 @@ public class MenuSelection implements TextVars, ActionListener{
 		hideList();
 	}
 	
+	/**
+	 * showList - Methode zeigt die komplette Auswahl
+	 */
 	public void showList(){
 		for(int i = 0; i < list.length; i++){
 			list[i].setVisible(true);
 		}
 	}
+	/**
+	 * hideList - Methode versteckt die komplette Auswahl
+	 */
 	public void hideList(){
 		for(int i = 0; i < list.length; i++){
 			list[i].setVisible(false);
 		}
 	}
 	
+	/**
+	 * resetBounds - Methode positioniert die Auswahl neu
+	 */
 	public void resetBounds(){
 		for(int i = 0; i < list.length; i++){
 			list[i].setBounds((window.getWidth()/2)-(button_width/2), (window.getHeight()/2)-(button_height/2)+(this.y_difference+(3+i)+((i+1)*button_height)), button_width, button_height);
 		}
 	}
 
+	/**
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == list[0]){

@@ -5,10 +5,21 @@ import javax.swing.JPanel;
 import image.LoadImage;
 import main.Window;
 
+/**
+ * Charakter Klasse
+ * 
+ * @author Philipp Röhlicke, Tim Ziegelbauer, Cedric Röhr
+ * @version 1.0
+ */
 public class Charakter extends JPanel {
 	private LoadImage char_img;
 	private int width;
 
+	/**
+	 * @param window Fensterobjekt
+	 * @param x X-Position im Fenster
+	 * @param y Y-Position im Fenster
+	 */
 	public Charakter(Window window, int x, int y) {
 		this.width = 64;
 		this.setOpaque(false);

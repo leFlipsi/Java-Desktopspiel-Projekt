@@ -32,10 +32,10 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 	private Menu menu;
 
 	/**
-	 * Konstruktor
+	 * Konstruktor Erstellt das Spiel und legt Standards fest
 	 * 
-	 * @param window
-	 * @param menu
+	 * @param window Fensterobjekt
+	 * @param menu Menüobjekt
 	 */
 	public GameControl(Window window, Menu menu) {
 		this.menu = menu;
@@ -74,14 +74,14 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 	 * setActive - Methode, wird ausgeführt, wenn ein Spiel geladen oder
 	 * erstellt wird
 	 * 
-	 * @param id
-	 * @param charaktername
-	 * @param spielstandname
-	 * @param item_status
-	 * @param player_x
-	 * @param player_y
-	 * @param player_rotation
-	 * @param bg
+	 * @param id abgespeicherte ID des Spielstandes
+	 * @param charaktername	abgespeicherter Charaktername
+	 * @param spielstandname abgespeicherter Spielstandname
+	 * @param item_status abgespeicherter Item-Status
+	 * @param player_x X-Position des Spielers
+	 * @param player_y Y-Position des Spielers
+	 * @param player_rotation Rotation des Spielers
+	 * @param bg Hintergrundobjekt
 	 */
 	public void setActive(String id, String charaktername, String spielstandname, String item_status, int player_x,
 			int player_y, int player_rotation, LoadBackground bg) {
@@ -405,7 +405,7 @@ public class GameControl extends Canvas implements Runnable, KeyListener {
 	 * animationVisibility - Methode zeigt das Charakterbild am Parameter t und
 	 * versteckt alle anderen Charakterbilder
 	 * 
-	 * @param t
+	 * @param t index des Charakterbildes, dessen Visibility auf TRUE gesetzt werden soll
 	 */
 	private void animationVisibility(int t) {
 		charakter[t].setVisible(true);
